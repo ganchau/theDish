@@ -18,7 +18,7 @@ DerivedData
 *.xcuserstate
 
 # API Keys
-constants.m
+Constants.m
 
 # CocoaPods
 #
