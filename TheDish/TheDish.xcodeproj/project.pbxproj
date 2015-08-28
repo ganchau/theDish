@@ -17,6 +17,7 @@
 		BD32548B1B8F425500C657F4 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = BD32548A1B8F425500C657F4 /* Constants.m */; };
 		BD3254911B8F5DF900C657F4 /* VenuesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD3254901B8F5DF900C657F4 /* VenuesTableViewController.m */; };
 		BDA421771B8FEDEC00844025 /* FourSquareAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA421761B8FEDEB00844025 /* FourSquareAPI.m */; };
+		BDA4217A1B8FFCEE00844025 /* Venue.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA421791B8FFCEE00844025 /* Venue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,8 @@
 		BD3254901B8F5DF900C657F4 /* VenuesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VenuesTableViewController.m; sourceTree = "<group>"; };
 		BDA421751B8FEDEB00844025 /* FourSquareAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FourSquareAPI.h; sourceTree = "<group>"; };
 		BDA421761B8FEDEB00844025 /* FourSquareAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FourSquareAPI.m; sourceTree = "<group>"; };
+		BDA421781B8FFCEE00844025 /* Venue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Venue.h; sourceTree = "<group>"; };
+		BDA421791B8FFCEE00844025 /* Venue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Venue.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +147,8 @@
 			children = (
 				BD3254891B8F425500C657F4 /* Constants.h */,
 				BD32548A1B8F425500C657F4 /* Constants.m */,
+				BDA421781B8FFCEE00844025 /* Venue.h */,
+				BDA421791B8FFCEE00844025 /* Venue.m */,
 				BDA421751B8FEDEB00844025 /* FourSquareAPI.h */,
 				BDA421761B8FEDEB00844025 /* FourSquareAPI.m */,
 			);
@@ -315,6 +320,7 @@
 				BD3254911B8F5DF900C657F4 /* VenuesTableViewController.m in Sources */,
 				BD3254691B8F41DB00C657F4 /* AppDelegate.m in Sources */,
 				BD3254661B8F41DB00C657F4 /* main.m in Sources */,
+				BDA4217A1B8FFCEE00844025 /* Venue.m in Sources */,
 				BD32548B1B8F425500C657F4 /* Constants.m in Sources */,
 				BDA421771B8FEDEC00844025 /* FourSquareAPI.m in Sources */,
 			);

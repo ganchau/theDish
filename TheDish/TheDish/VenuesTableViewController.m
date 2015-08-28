@@ -8,14 +8,22 @@
 
 #import "VenuesTableViewController.h"
 #import "FourSquareAPI.h"
+#import "Venue.h"
 
 NSString *const REUSE_ID = @"venueRID";
 
 @interface VenuesTableViewController ()
 
+@property (nonatomic, strong) NSMutableArray *venues;
+
 @end
 
 @implementation VenuesTableViewController
+
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -26,18 +34,25 @@ NSString *const REUSE_ID = @"venueRID";
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+    [self setupVenueData];
+}
+
+- (void)setupVenueData
+{
+    self.venues = [@[] mutableCopy];
+    
     [FourSquareAPI getVenuesWithCompletion:^(BOOL success, id responseObject) {
         if (success) {
             NSLog(@"Success!!!\n%@", responseObject);
+            for (NSDictionary *venueObject in responseObject) {
+                Venue *venue = [[Venue alloc] initWithVenue:venueObject];
+                [self.venues addObject:venue];
+            }
+            [self.tableView reloadData]; // must reload the table when info is fetched
         } else {
             NSLog(@"Could not retrieve data.");
         }
     }];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
@@ -49,13 +64,20 @@ NSString *const REUSE_ID = @"venueRID";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return 0;
+    NSLog(@"%li", self.venues.count);
+    
+    return self.venues.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:REUSE_ID forIndexPath:indexPath];
     
     // Configure the cell...
+    Venue *venue = self.venues[indexPath.row];
+    cell.textLabel.text = venue.name;
+    
+    NSString *address = [venue.address componentsJoinedByString:@", "];
+    cell.detailTextLabel.text = address;
     
     return cell;
 }
