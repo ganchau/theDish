@@ -23,7 +23,7 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
     [manager GET:[FOURSQUARE_BASE_URL stringByAppendingString:@"venues/search"] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        completionBlock(YES, responseObject);
+        completionBlock(YES, responseObject[@"response"][@"venues"]);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
         completionBlock(NO, nil);
