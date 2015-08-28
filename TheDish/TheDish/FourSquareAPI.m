@@ -12,11 +12,11 @@
 
 @implementation FourSquareAPI
 
-+ (void)getVenuesWithCompletion:(void (^)(BOOL, id))completionBlock
++ (void)getVenuesWithLatLong:(NSString *)latLong Completion:(void (^)(BOOL, id))completionBlock
 {
     NSDictionary *params = @{ @"client_id" : FOURSQUARE_CLIENT_ID,
                               @"client_secret" : FOURSQUARE_CLIENT_SECRET,
-                              @"ll" : @"40.7,-74",
+                              @"ll" : latLong,
                               @"query" : @"pizza",
                               @"v" : @"20150827" };
     

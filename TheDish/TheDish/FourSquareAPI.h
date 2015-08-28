@@ -10,6 +10,6 @@
 
 @interface FourSquareAPI : NSObject
 
-+ (void)getVenuesWithCompletion:(void (^)(BOOL success, id responseObject))completionBlock;
++ (void)getVenuesWithLatLong:(NSString *)latLong Completion:(void (^)(BOOL success, id responseObject))completionBlock;
 
 @end
