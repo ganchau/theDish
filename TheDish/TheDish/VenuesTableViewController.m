@@ -9,6 +9,7 @@
 #import "VenuesTableViewController.h"
 #import "FourSquareAPI.h"
 #import "Venue.h"
+#import <SVProgressHUD/SVProgressHUD.h>
 
 NSString *const REUSE_ID = @"venueRID";
 
@@ -28,13 +29,22 @@ NSString *const REUSE_ID = @"venueRID";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+    [self setupProgressHUD];
     [self setupVenueData];
+}
+
+- (void)setupProgressHUD
+{
+    [SVProgressHUD setBackgroundColor:[UIColor lightGrayColor]];         // default is [UIColor whiteColor]
+    [SVProgressHUD setForegroundColor:[UIColor whiteColor]];             // default is [UIColor blackColor]
+    [SVProgressHUD setRingThickness:2.0];                                // default is 4 pt
 }
 
 - (void)setupVenueData
@@ -42,12 +52,15 @@ NSString *const REUSE_ID = @"venueRID";
     self.venues = [@[] mutableCopy];
     
     [FourSquareAPI getVenuesWithCompletion:^(BOOL success, id responseObject) {
+        [SVProgressHUD show];  // show progress animation
+
         if (success) {
             NSLog(@"Success!!!\n%@", responseObject);
             for (NSDictionary *venueObject in responseObject) {
                 Venue *venue = [[Venue alloc] initWithVenue:venueObject];
                 [self.venues addObject:venue];
             }
+            [SVProgressHUD dismiss];  // dismiss progress animation
             [self.tableView reloadData]; // must reload the table when info is fetched
         } else {
             NSLog(@"Could not retrieve data.");
@@ -59,13 +72,14 @@ NSString *const REUSE_ID = @"venueRID";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
+
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    NSLog(@"%li", self.venues.count);
-    
+    NSLog(@"Venues count: %li", self.venues.count);
+
     return self.venues.count;
 }
 
