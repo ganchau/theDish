@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  VenuesTableViewController.h
 //  TheDish
 //
 //  Created by Gan Chau on 8/27/15.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface VenuesTableViewController : UITableViewController
 
 @end
-
