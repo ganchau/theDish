@@ -10,12 +10,17 @@
 #import "FourSquareAPI.h"
 #import "Venue.h"
 #import <SVProgressHUD/SVProgressHUD.h>
+#import <CoreLocation/CoreLocation.h>
 
 NSString *const REUSE_ID = @"venueRID";
 
-@interface VenuesTableViewController ()
+@interface VenuesTableViewController () <CLLocationManagerDelegate>
 
 @property (nonatomic, strong) NSMutableArray *venues;
+@property (nonatomic, strong) CLLocationManager *locationManager;
+
+- (void)setupProgressHUD;
+- (void)setupVenueData;
 
 @end
 
@@ -29,7 +34,6 @@ NSString *const REUSE_ID = @"venueRID";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -37,41 +41,97 @@ NSString *const REUSE_ID = @"venueRID";
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     [self setupProgressHUD];
-    [self setupVenueData];
+    [self getCurrentLocation];
 }
+
+#pragma mark - Setting Up View
 
 - (void)setupProgressHUD
 {
     [SVProgressHUD setBackgroundColor:[UIColor lightGrayColor]];         // default is [UIColor whiteColor]
     [SVProgressHUD setForegroundColor:[UIColor whiteColor]];             // default is [UIColor blackColor]
     [SVProgressHUD setRingThickness:2.0];                                // default is 4 pt
+
+    // set up pull down refresh progress spinner
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor colorWithRed:216.0/255.0 green:216.0/255.0 blue:216.0/255.0 alpha:1];
+    self.refreshControl.tintColor = [UIColor colorWithRed:50.0/255.0 green:0 blue:1 alpha:1];
+    [self.refreshControl addTarget:self
+                            action:@selector(getCurrentLocation)
+                  forControlEvents:UIControlEventValueChanged];
 }
 
 - (void)setupVenueData
 {
     self.venues = [@[] mutableCopy];
-    
-    [FourSquareAPI getVenuesWithCompletion:^(BOOL success, id responseObject) {
-        [SVProgressHUD show];  // show progress animation
+    NSString *latLong = [NSString stringWithFormat:@"%.2f, %.2f", self.locationManager.location.coordinate.latitude, self.locationManager.location.coordinate.longitude];
+    NSLog(@"Lat Long: %@", latLong);
 
+    [FourSquareAPI getVenuesWithLatLong:latLong Completion:^(BOOL success, id responseObject) {
         if (success) {
-            NSLog(@"Success!!!\n%@", responseObject);
+            NSLog(@"Success!!!");
             for (NSDictionary *venueObject in responseObject) {
                 Venue *venue = [[Venue alloc] initWithVenue:venueObject];
                 [self.venues addObject:venue];
             }
-            [SVProgressHUD dismiss];  // dismiss progress animation
             [self.tableView reloadData]; // must reload the table when info is fetched
+            [SVProgressHUD dismiss];  // dismiss progress animation
+            [self.refreshControl endRefreshing];  // end refresh animation
         } else {
             NSLog(@"Could not retrieve data.");
+            [SVProgressHUD dismiss];  // dismiss progress animation
+            [self.refreshControl endRefreshing];  // end refresh animation
         }
     }];
+}
+
+#pragma mark - Core Location Manager
+
+- (void)getCurrentLocation;
+{
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+        NSUInteger code = [CLLocationManager authorizationStatus];
+        if (code == kCLAuthorizationStatusNotDetermined && ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)] || [self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)])) {
+            // choose one request according to your business.
+            if([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"]) {
+                [self.locationManager requestAlwaysAuthorization];
+            } else if([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"]) {
+                [self.locationManager requestWhenInUseAuthorization];
+            } else {
+                NSLog(@"Info.plist does not contain NSLocationAlwaysUsageDescription or NSLocationWhenInUseUsageDescription");
+            }
+        }
+    }
+    [self.locationManager startUpdatingLocation];
+}
+
+#pragma mark - CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    NSLog(@"CLLocationManager didFailWithError: %@", error);
+    UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                         message:@"Failed to Get Your Location"
+                                                        delegate:nil
+                                               cancelButtonTitle:@"OK"
+                                               otherButtonTitles:nil];
+    [errorAlert show];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    [self.locationManager stopUpdatingLocation];
+    [self setupVenueData];
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
+    [SVProgressHUD show];  // show progress animation
 
     return 1;
 }
@@ -95,6 +155,7 @@ NSString *const REUSE_ID = @"venueRID";
     
     return cell;
 }
+
 
 /*
 // Override to support conditional editing of the table view.
