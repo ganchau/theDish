@@ -12,22 +12,33 @@
 
 @implementation FourSquareAPI
 
-+ (void)getVenuesWithLatLong:(NSString *)latLong Completion:(void (^)(BOOL, id))completionBlock
++ (void)getVenuesWithLatLong:(NSString *)latLong Completion:(void (^)(BOOL, id, NSError *))completionBlock
 {
     NSDictionary *params = @{ @"client_id" : FOURSQUARE_CLIENT_ID,
                               @"client_secret" : FOURSQUARE_CLIENT_SECRET,
                               @"ll" : latLong,
-                              @"query" : @"pizza",
-                              @"v" : @"20150827" };
+                              @"categoryId" : SEARCH_FOOD_CATEGORY,
+                              @"radius" : SEARCH_RADIUS,
+                              @"v" : [self formatDate] };
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
     [manager GET:[FOURSQUARE_BASE_URL stringByAppendingString:@"venues/search"] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        completionBlock(YES, responseObject[@"response"][@"venues"]);
+        completionBlock(YES, responseObject[@"response"][@"venues"], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        completionBlock(NO, nil);
+        completionBlock(NO, nil, error);
     }];
+}
+
++ (NSString *)formatDate
+{
+    NSDate *date = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyyMMdd"];
+    NSString *formattedDateString = [dateFormatter stringFromDate:date];
+    
+    NSLog(@"DATE = %@", formattedDateString);
+    return formattedDateString;
 }
 
 @end

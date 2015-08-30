@@ -40,6 +40,7 @@ NSString *const REUSE_ID = @"venueRID";
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+    self.venues = [@[] mutableCopy];
     [self setupProgressHUD];
     [self getCurrentLocation];
 }
@@ -63,11 +64,12 @@ NSString *const REUSE_ID = @"venueRID";
 
 - (void)setupVenueData
 {
-    self.venues = [@[] mutableCopy];
+    [self.venues removeAllObjects];
+    
     NSString *latLong = [NSString stringWithFormat:@"%.2f, %.2f", self.locationManager.location.coordinate.latitude, self.locationManager.location.coordinate.longitude];
     NSLog(@"Lat Long: %@", latLong);
 
-    [FourSquareAPI getVenuesWithLatLong:latLong Completion:^(BOOL success, id responseObject) {
+    [FourSquareAPI getVenuesWithLatLong:latLong Completion:^(BOOL success, id responseObject, NSError *error) {
         if (success) {
             NSLog(@"Success!!!");
             for (NSDictionary *venueObject in responseObject) {
@@ -78,7 +80,7 @@ NSString *const REUSE_ID = @"venueRID";
             [SVProgressHUD dismiss];  // dismiss progress animation
             [self.refreshControl endRefreshing];  // end refresh animation
         } else {
-            NSLog(@"Could not retrieve data.");
+            NSLog(@"Error: %@", error.description);
             [SVProgressHUD dismiss];  // dismiss progress animation
             [self.refreshControl endRefreshing];  // end refresh animation
         }

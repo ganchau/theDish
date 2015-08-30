@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 
 extern NSString *const FOURSQUARE_BASE_URL;
-extern NSString *const FOURSQUARE_ACCESS_TOKEN_URL;
-extern NSString *const FOURSQUARE_AUTHORIZE_URL;
 extern NSString *const FOURSQUARE_CLIENT_ID;
 extern NSString *const FOURSQUARE_CLIENT_SECRET;
+extern NSString *const SEARCH_FOOD_CATEGORY;
+extern NSString *const SEARCH_RADIUS;
 
 @interface Constants : NSObject
 
