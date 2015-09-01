@@ -52,10 +52,11 @@
          }];
 }
 
-+ (void)setImageView:(UIImageView *)imageView WithURL:(NSString *)URLString
++ (void)setImageView:(UIImageView *)imageView WithURL:(NSString *)URLString Completion:(void (^)(BOOL))completionBlock
 {
     NSURL *URL = [NSURL URLWithString:URLString];
-    [imageView setImageWithURL:URL];
+    [imageView setImageWithURL:URL placeholderImage:[UIImage imageNamed:@"Grey-Background-BLANK"]];
+    completionBlock(YES);
 }
 
 + (NSString *)formatDate

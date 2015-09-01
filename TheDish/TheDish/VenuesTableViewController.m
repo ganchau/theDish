@@ -12,12 +12,14 @@
 #import "Venue.h"
 #import <SVProgressHUD/SVProgressHUD.h>
 #import <CoreLocation/CoreLocation.h>
+#import "Constants.h"
 
 NSString *const REUSE_ID = @"venueRID";
 
 @interface VenuesTableViewController () <CLLocationManagerDelegate>
 
 @property (nonatomic, strong) NSMutableArray *venues;
+@property (nonatomic, strong) NSMutableArray *venuesImages;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
 - (void)setupProgressHUD;
@@ -26,11 +28,6 @@ NSString *const REUSE_ID = @"venueRID";
 @end
 
 @implementation VenuesTableViewController
-
-- (BOOL)prefersStatusBarHidden
-{
-    return YES;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -42,6 +39,7 @@ NSString *const REUSE_ID = @"venueRID";
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     self.venues = [@[] mutableCopy];
+    self.venuesImages = [@[] mutableCopy];
     [self setupProgressHUD];
     [self getCurrentLocation];
 }
@@ -68,6 +66,7 @@ NSString *const REUSE_ID = @"venueRID";
     [SVProgressHUD show];  // show progress animation
 
     [self.venues removeAllObjects];
+    [self.venuesImages removeAllObjects];
     
     NSString *latLong = [NSString stringWithFormat:@"%.2f, %.2f", self.locationManager.location.coordinate.latitude, self.locationManager.location.coordinate.longitude];
     NSLog(@"Lat Long: %@", latLong);
@@ -152,8 +151,28 @@ NSString *const REUSE_ID = @"venueRID";
     // Configure the cell...
     Venue *venue = self.venues[indexPath.row];
     cell.venueName.text = venue.name;
-    [FourSquareAPI setImageView:cell.venuePhoto
-                        WithURL:@"https://irs0.4sqi.net/img/general/300x100/26739064_mUxQ4CGrobFqwpcAIoX6YoAdH0xCDT4YAxaU6y65PPI.jpg"];
+    
+    if (self.venuesImages.count > indexPath.row) {
+        cell.venuePhoto.image = self.venuesImages[indexPath.row];
+    } else {
+        [FourSquareAPI getVenuesPhotosWithVenueID:venue.venueID
+                                       Completion:^(BOOL success, id responseObject, NSError *error) {
+                                           if (success) {
+                                               NSString *prefixURL = [responseObject[@"items"] firstObject][@"prefix"];
+                                               NSString *suffixURL = [responseObject[@"items"] firstObject][@"suffix"];
+                                               NSString *imageURL = [NSString stringWithFormat:@"%@%@%@", prefixURL, IMAGE_SIZE, suffixURL];
+                                               [FourSquareAPI setImageView:cell.venuePhoto
+                                                                   WithURL:imageURL
+                                                                Completion:^(BOOL success) {
+                                                                    if (success) {
+                                                                        [self.venuesImages addObject:cell.venuePhoto.image];
+                                                                    }
+                                                                }];
+                                           }
+                                       }];
+    }
+
+
     NSString *address = [venue.address componentsJoinedByString:@", "];
     cell.venueAddress.text = address;
     
