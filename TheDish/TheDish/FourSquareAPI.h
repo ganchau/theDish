@@ -7,9 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface FourSquareAPI : NSObject
 
 + (void)getVenuesWithLatLong:(NSString *)latLong Completion:(void (^)(BOOL success, id responseObject, NSError *error))completionBlock;
+
++ (void)getVenuesPhotosWithVenueID:(NSString *)venueID Completion:(void (^)(BOOL success, id responseObject, NSError *error))completionBlock;
+
++ (void)setImageView:(UIImageView *)imageView WithURL:(NSString *)URLString;
 
 @end

@@ -18,6 +18,7 @@
 		BD3254911B8F5DF900C657F4 /* VenuesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD3254901B8F5DF900C657F4 /* VenuesTableViewController.m */; };
 		BDA421771B8FEDEC00844025 /* FourSquareAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA421761B8FEDEB00844025 /* FourSquareAPI.m */; };
 		BDA4217A1B8FFCEE00844025 /* Venue.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA421791B8FFCEE00844025 /* Venue.m */; };
+		BDA421831B954BDD00844025 /* VenueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA421821B954BDD00844025 /* VenueTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,8 @@
 		BDA421761B8FEDEB00844025 /* FourSquareAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FourSquareAPI.m; sourceTree = "<group>"; };
 		BDA421781B8FFCEE00844025 /* Venue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Venue.h; sourceTree = "<group>"; };
 		BDA421791B8FFCEE00844025 /* Venue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Venue.m; sourceTree = "<group>"; };
+		BDA421811B954BDD00844025 /* VenueTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VenueTableViewCell.h; sourceTree = "<group>"; };
+		BDA421821B954BDD00844025 /* VenueTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VenueTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +170,8 @@
 		BD32548E1B8F427000C657F4 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				BDA421811B954BDD00844025 /* VenueTableViewCell.h */,
+				BDA421821B954BDD00844025 /* VenueTableViewCell.m */,
 				BD32546D1B8F41DB00C657F4 /* Main.storyboard */,
 				BD3254701B8F41DB00C657F4 /* Images.xcassets */,
 				BD3254721B8F41DB00C657F4 /* LaunchScreen.xib */,
@@ -322,6 +327,7 @@
 				BD3254661B8F41DB00C657F4 /* main.m in Sources */,
 				BDA4217A1B8FFCEE00844025 /* Venue.m in Sources */,
 				BD32548B1B8F425500C657F4 /* Constants.m in Sources */,
+				BDA421831B954BDD00844025 /* VenueTableViewCell.m in Sources */,
 				BDA421771B8FEDEC00844025 /* FourSquareAPI.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
