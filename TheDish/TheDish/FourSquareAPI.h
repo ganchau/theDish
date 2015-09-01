@@ -15,6 +15,6 @@
 
 + (void)getVenuesPhotosWithVenueID:(NSString *)venueID Completion:(void (^)(BOOL success, id responseObject, NSError *error))completionBlock;
 
-+ (void)setImageView:(UIImageView *)imageView WithURL:(NSString *)URLString;
++ (void)getImageWithURL:(NSString *)URLString Completion:(void (^)(BOOL success, UIImage *image, NSError *error))completionBlock;
 
 @end

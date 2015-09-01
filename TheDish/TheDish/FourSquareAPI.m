@@ -52,10 +52,19 @@
          }];
 }
 
-+ (void)setImageView:(UIImageView *)imageView WithURL:(NSString *)URLString
++ (void)getImageWithURL:(NSString *)URLString Completion:(void (^)(BOOL, UIImage *, NSError *))completionBlock
 {
-    NSURL *URL = [NSURL URLWithString:URLString];
-    [imageView setImageWithURL:URL];
+    NSURLRequest *URLRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:URLString]];
+    AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:URLRequest];
+    requestOperation.responseSerializer = [AFImageResponseSerializer serializer];
+    
+    [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        completionBlock(YES, responseObject, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completionBlock(NO, nil, error);
+    }];
+    
+    [requestOperation start];
 }
 
 + (NSString *)formatDate
@@ -65,7 +74,6 @@
     [dateFormatter setDateFormat:@"yyyyMMdd"];
     NSString *formattedDateString = [dateFormatter stringFromDate:date];
     
-    NSLog(@"DATE = %@", formattedDateString);
     return formattedDateString;
 }
 

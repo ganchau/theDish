@@ -22,6 +22,7 @@
     if (self) {
         _name = venue[@"name"];
         _address = venue[@"location"][@"formattedAddress"];
+        _venueID = venue[@"id"];
     }
     
     return self;

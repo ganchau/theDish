@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSArray *address;
+@property (nonatomic, strong) NSString *venueID;
 
 - (instancetype)initWithVenue:(NSDictionary *)venue;
 
