@@ -7,6 +7,7 @@
 //
 
 #import "VenuesTableViewController.h"
+#import "VenueTableViewCell.h"
 #import "FourSquareAPI.h"
 #import "Venue.h"
 #import <SVProgressHUD/SVProgressHUD.h>
@@ -52,7 +53,7 @@ NSString *const REUSE_ID = @"venueRID";
     [SVProgressHUD setBackgroundColor:[UIColor lightGrayColor]];         // default is [UIColor whiteColor]
     [SVProgressHUD setForegroundColor:[UIColor whiteColor]];             // default is [UIColor blackColor]
     [SVProgressHUD setRingThickness:2.0];                                // default is 4 pt
-
+    
     // set up pull down refresh progress spinner
     self.refreshControl = [[UIRefreshControl alloc] init];
     self.refreshControl.backgroundColor = [UIColor colorWithRed:216.0/255.0 green:216.0/255.0 blue:216.0/255.0 alpha:1];
@@ -64,6 +65,8 @@ NSString *const REUSE_ID = @"venueRID";
 
 - (void)setupVenueData
 {
+    [SVProgressHUD show];  // show progress animation
+
     [self.venues removeAllObjects];
     
     NSString *latLong = [NSString stringWithFormat:@"%.2f, %.2f", self.locationManager.location.coordinate.latitude, self.locationManager.location.coordinate.longitude];
@@ -133,8 +136,6 @@ NSString *const REUSE_ID = @"venueRID";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    [SVProgressHUD show];  // show progress animation
-
     return 1;
 }
 
@@ -146,14 +147,15 @@ NSString *const REUSE_ID = @"venueRID";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:REUSE_ID forIndexPath:indexPath];
+    VenueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:REUSE_ID forIndexPath:indexPath];
     
     // Configure the cell...
     Venue *venue = self.venues[indexPath.row];
-    cell.textLabel.text = venue.name;
-    
+    cell.venueName.text = venue.name;
+    [FourSquareAPI setImageView:cell.venuePhoto
+                        WithURL:@"https://irs0.4sqi.net/img/general/300x100/26739064_mUxQ4CGrobFqwpcAIoX6YoAdH0xCDT4YAxaU6y65PPI.jpg"];
     NSString *address = [venue.address componentsJoinedByString:@", "];
-    cell.detailTextLabel.text = address;
+    cell.venueAddress.text = address;
     
     return cell;
 }
