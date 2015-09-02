@@ -171,7 +171,8 @@ NSString *const REUSE_ID = @"venueRID";
     
     // Configure the cell...
     NSUInteger currentRow = indexPath.row;
-    cell.venuePhoto.image = [UIImage imageNamed:@"Grey-Background-BLANK"];
+    UIImage *placeholderImage = [UIImage imageNamed:@"placeholder"];
+    cell.venuePhoto.image = placeholderImage;
     Venue *venue = self.venues[currentRow];
     cell.venueName.text = venue.name;
     
@@ -199,6 +200,13 @@ NSString *const REUSE_ID = @"venueRID";
                                                                                             }];
                                                                        } else {
                                                                            NSLog(@"Error getting image: %@", error.description);
+                                                                           [self.venuesImages addObject:placeholderImage];
+                                                                           
+                                                                           [UIView animateWithDuration:0.3
+                                                                                            animations:^{
+                                                                                                cell.venuePhoto.alpha = 1;
+                                                                                                [self.view layoutIfNeeded];
+                                                                                            }];
                                                                        }
                                                                    }];
                                            }
