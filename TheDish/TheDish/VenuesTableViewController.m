@@ -8,6 +8,7 @@
 
 #import "VenuesTableViewController.h"
 #import "VenueTableViewCell.h"
+#import "DataManager.h"
 #import "FourSquareAPI.h"
 #import "Venue.h"
 #import <SVProgressHUD/SVProgressHUD.h>
@@ -18,7 +19,7 @@ NSString *const REUSE_ID = @"venueRID";
 
 @interface VenuesTableViewController () <CLLocationManagerDelegate>
 
-@property (nonatomic, strong) NSMutableArray *venues;
+@property (nonatomic, strong) DataManager *dataManager;
 @property (nonatomic, strong) NSMutableArray *venuesImages;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
@@ -46,7 +47,7 @@ NSString *const REUSE_ID = @"venueRID";
 #pragma mark - Initial Setup for view controller
 - (void)initialSetup
 {
-    self.venues = [@[] mutableCopy];
+    self.dataManager = [DataManager sharedDataManager];
     self.venuesImages = [@[] mutableCopy];
     
     // set up the navigation bar properties
@@ -84,7 +85,7 @@ NSString *const REUSE_ID = @"venueRID";
 {
     [SVProgressHUD show];  // show progress animation
     
-    [self.venues removeAllObjects];
+    [self.dataManager.venuesList removeAllObjects];
     [self.venuesImages removeAllObjects];
     
     NSString *latLong = [NSString stringWithFormat:@"%.2f, %.2f", self.locationManager.location.coordinate.latitude, self.locationManager.location.coordinate.longitude];
@@ -95,7 +96,7 @@ NSString *const REUSE_ID = @"venueRID";
             NSLog(@"Success!!!");
             for (NSDictionary *venueObject in responseObject) {
                 Venue *venue = [[Venue alloc] initWithVenue:venueObject];
-                [self.venues addObject:venue];
+                [self.dataManager.venuesList addObject:venue];
             }
             [self.tableView reloadData]; // must reload the table when info is fetched
             [SVProgressHUD dismiss];  // dismiss progress animation
@@ -160,9 +161,9 @@ NSString *const REUSE_ID = @"venueRID";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    NSLog(@"Venues count: %li", self.venues.count);
+    NSLog(@"Venues count: %li", self.dataManager.venuesList.count);
     
-    return self.venues.count;
+    return self.dataManager.venuesList.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -173,7 +174,7 @@ NSString *const REUSE_ID = @"venueRID";
     NSUInteger currentRow = indexPath.row;
     UIImage *placeholderImage = [UIImage imageNamed:@"placeholder"];
     cell.venuePhoto.image = placeholderImage;
-    Venue *venue = self.venues[currentRow];
+    Venue *venue = self.dataManager.venuesList[currentRow];
     cell.venueName.text = venue.name;
     
     if (self.venuesImages.count > currentRow) {
@@ -185,30 +186,45 @@ NSString *const REUSE_ID = @"venueRID";
                                            if (success) {
                                                NSString *prefixURL = [responseObject[@"items"] firstObject][@"prefix"];
                                                NSString *suffixURL = [responseObject[@"items"] firstObject][@"suffix"];
-                                               NSString *imageURL = [NSString stringWithFormat:@"%@%@%@", prefixURL, IMAGE_SIZE, suffixURL];
+                                               if (prefixURL != nil && suffixURL != nil) {
+                                                   NSString *imageURL = [NSString stringWithFormat:@"%@%@%@", prefixURL, IMAGE_SIZE, suffixURL];
+                                                   NSLog(@"URL for photo: %@", imageURL);
+                                                   
+                                                   [FourSquareAPI getImageWithURL:imageURL
+                                                                       Completion:^(BOOL success, UIImage *image, NSError *error) {
+                                                                           if (success) {
+                                                                               [self.venuesImages addObject:image];
+                                                                               cell.venuePhoto.image = image;
+                                                                               
+                                                                               [UIView animateWithDuration:0.3
+                                                                                                animations:^{
+                                                                                                    cell.venuePhoto.alpha = 1;
+                                                                                                    [self.view layoutIfNeeded];
+                                                                                                }];
+                                                                           } else {
+                                                                               NSLog(@"Error getting image: %@", error.description);
+                                                                               [self.venuesImages addObject:placeholderImage];
+                                                                               
+                                                                               [UIView animateWithDuration:0.3
+                                                                                                animations:^{
+                                                                                                    cell.venuePhoto.alpha = 1;
+                                                                                                    [self.view layoutIfNeeded];
+                                                                                                }];
+                                                                           }
+                                                                       }];
+                                               } else {
+                                                   NSLog(@"Venue has no photo.");
+                                                   [self.venuesImages addObject:placeholderImage];
+                                                   
+                                                   [UIView animateWithDuration:0.3
+                                                                    animations:^{
+                                                                        cell.venuePhoto.alpha = 1;
+                                                                        [self.view layoutIfNeeded];
+                                                                    }];
+                                               }
                                                
-                                               [FourSquareAPI getImageWithURL:imageURL
-                                                                   Completion:^(BOOL success, UIImage *image, NSError *error) {
-                                                                       if (success) {
-                                                                           [self.venuesImages addObject:image];
-                                                                           cell.venuePhoto.image = image;
-
-                                                                           [UIView animateWithDuration:0.3
-                                                                                            animations:^{
-                                                                                                cell.venuePhoto.alpha = 1;
-                                                                                                [self.view layoutIfNeeded];
-                                                                                            }];
-                                                                       } else {
-                                                                           NSLog(@"Error getting image: %@", error.description);
-                                                                           [self.venuesImages addObject:placeholderImage];
-                                                                           
-                                                                           [UIView animateWithDuration:0.3
-                                                                                            animations:^{
-                                                                                                cell.venuePhoto.alpha = 1;
-                                                                                                [self.view layoutIfNeeded];
-                                                                                            }];
-                                                                       }
-                                                                   }];
+                                           } else {
+                                               NSLog(@"Error getting photo data from venue: %@", error.description);
                                            }
                                        }];
     }
