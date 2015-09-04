@@ -18,6 +18,7 @@
     NSDictionary *params = @{ @"client_id" : FOURSQUARE_CLIENT_ID,
                               @"client_secret" : FOURSQUARE_CLIENT_SECRET,
                               @"ll" : latLong,
+                              @"limit" : SEARCH_LIMIT,
                               @"categoryId" : SEARCH_FOOD_CATEGORY,
                               @"radius" : SEARCH_RADIUS,
                               @"v" : [self formatDate] };

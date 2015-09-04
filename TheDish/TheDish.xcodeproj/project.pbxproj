@@ -16,9 +16,11 @@
 		BD3254801B8F41DB00C657F4 /* TheDishTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BD32547F1B8F41DB00C657F4 /* TheDishTests.m */; };
 		BD32548B1B8F425500C657F4 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = BD32548A1B8F425500C657F4 /* Constants.m */; };
 		BD3254911B8F5DF900C657F4 /* VenuesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD3254901B8F5DF900C657F4 /* VenuesTableViewController.m */; };
+		BD6CC2FF1B9932BE0088F18F /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD6CC2FE1B9932BE0088F18F /* DataManager.m */; };
 		BDA421771B8FEDEC00844025 /* FourSquareAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA421761B8FEDEB00844025 /* FourSquareAPI.m */; };
 		BDA4217A1B8FFCEE00844025 /* Venue.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA421791B8FFCEE00844025 /* Venue.m */; };
 		BDA421831B954BDD00844025 /* VenueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA421821B954BDD00844025 /* VenueTableViewCell.m */; };
+		BDA421861B98BCD100844025 /* LikedVenuesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA421851B98BCD100844025 /* LikedVenuesTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,12 +52,16 @@
 		BD32548A1B8F425500C657F4 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		BD32548F1B8F5DF900C657F4 /* VenuesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VenuesTableViewController.h; sourceTree = "<group>"; };
 		BD3254901B8F5DF900C657F4 /* VenuesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VenuesTableViewController.m; sourceTree = "<group>"; };
+		BD6CC2FD1B9932BE0088F18F /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
+		BD6CC2FE1B9932BE0088F18F /* DataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
 		BDA421751B8FEDEB00844025 /* FourSquareAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FourSquareAPI.h; sourceTree = "<group>"; };
 		BDA421761B8FEDEB00844025 /* FourSquareAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FourSquareAPI.m; sourceTree = "<group>"; };
 		BDA421781B8FFCEE00844025 /* Venue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Venue.h; sourceTree = "<group>"; };
 		BDA421791B8FFCEE00844025 /* Venue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Venue.m; sourceTree = "<group>"; };
 		BDA421811B954BDD00844025 /* VenueTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VenueTableViewCell.h; sourceTree = "<group>"; };
 		BDA421821B954BDD00844025 /* VenueTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VenueTableViewCell.m; sourceTree = "<group>"; };
+		BDA421841B98BCD100844025 /* LikedVenuesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LikedVenuesTableViewController.h; sourceTree = "<group>"; };
+		BDA421851B98BCD100844025 /* LikedVenuesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LikedVenuesTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +154,8 @@
 		BD32548C1B8F426400C657F4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				BD6CC2FD1B9932BE0088F18F /* DataManager.h */,
+				BD6CC2FE1B9932BE0088F18F /* DataManager.m */,
 				BD3254891B8F425500C657F4 /* Constants.h */,
 				BD32548A1B8F425500C657F4 /* Constants.m */,
 				BDA421781B8FFCEE00844025 /* Venue.h */,
@@ -163,6 +171,8 @@
 			children = (
 				BD32548F1B8F5DF900C657F4 /* VenuesTableViewController.h */,
 				BD3254901B8F5DF900C657F4 /* VenuesTableViewController.m */,
+				BDA421841B98BCD100844025 /* LikedVenuesTableViewController.h */,
+				BDA421851B98BCD100844025 /* LikedVenuesTableViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -324,10 +334,12 @@
 			files = (
 				BD3254911B8F5DF900C657F4 /* VenuesTableViewController.m in Sources */,
 				BD3254691B8F41DB00C657F4 /* AppDelegate.m in Sources */,
+				BDA421861B98BCD100844025 /* LikedVenuesTableViewController.m in Sources */,
 				BD3254661B8F41DB00C657F4 /* main.m in Sources */,
 				BDA4217A1B8FFCEE00844025 /* Venue.m in Sources */,
 				BD32548B1B8F425500C657F4 /* Constants.m in Sources */,
 				BDA421831B954BDD00844025 /* VenueTableViewCell.m in Sources */,
+				BD6CC2FF1B9932BE0088F18F /* DataManager.m in Sources */,
 				BDA421771B8FEDEC00844025 /* FourSquareAPI.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
