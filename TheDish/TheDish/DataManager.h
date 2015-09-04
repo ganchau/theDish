@@ -7,11 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
 @interface DataManager : NSObject
 
 @property (nonatomic, strong) NSMutableArray *venuesList;
+@property (nonatomic, strong, readonly) NSManagedObjectContext *managedObjectContext;
 
 + (instancetype)sharedDataManager;
+- (void)saveContext;
+
 
 @end

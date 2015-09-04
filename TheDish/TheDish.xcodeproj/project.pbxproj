@@ -17,6 +17,8 @@
 		BD32548B1B8F425500C657F4 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = BD32548A1B8F425500C657F4 /* Constants.m */; };
 		BD3254911B8F5DF900C657F4 /* VenuesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD3254901B8F5DF900C657F4 /* VenuesTableViewController.m */; };
 		BD6CC2FF1B9932BE0088F18F /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD6CC2FE1B9932BE0088F18F /* DataManager.m */; };
+		BD88E38B1B9A3777000692DD /* PersonalVenueList.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BD88E3891B9A3777000692DD /* PersonalVenueList.xcdatamodeld */; };
+		BD88E38E1B9A3E1E000692DD /* PersonalVenue.m in Sources */ = {isa = PBXBuildFile; fileRef = BD88E38D1B9A3E1E000692DD /* PersonalVenue.m */; };
 		BDA421771B8FEDEC00844025 /* FourSquareAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA421761B8FEDEB00844025 /* FourSquareAPI.m */; };
 		BDA4217A1B8FFCEE00844025 /* Venue.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA421791B8FFCEE00844025 /* Venue.m */; };
 		BDA421831B954BDD00844025 /* VenueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BDA421821B954BDD00844025 /* VenueTableViewCell.m */; };
@@ -54,6 +56,9 @@
 		BD3254901B8F5DF900C657F4 /* VenuesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VenuesTableViewController.m; sourceTree = "<group>"; };
 		BD6CC2FD1B9932BE0088F18F /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
 		BD6CC2FE1B9932BE0088F18F /* DataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
+		BD88E38A1B9A3777000692DD /* PersonalVenueList.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PersonalVenueList.xcdatamodel; sourceTree = "<group>"; };
+		BD88E38C1B9A3E1E000692DD /* PersonalVenue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalVenue.h; sourceTree = "<group>"; };
+		BD88E38D1B9A3E1E000692DD /* PersonalVenue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalVenue.m; sourceTree = "<group>"; };
 		BDA421751B8FEDEB00844025 /* FourSquareAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FourSquareAPI.h; sourceTree = "<group>"; };
 		BDA421761B8FEDEB00844025 /* FourSquareAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FourSquareAPI.m; sourceTree = "<group>"; };
 		BDA421781B8FFCEE00844025 /* Venue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Venue.h; sourceTree = "<group>"; };
@@ -154,6 +159,9 @@
 		BD32548C1B8F426400C657F4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				BD88E38C1B9A3E1E000692DD /* PersonalVenue.h */,
+				BD88E38D1B9A3E1E000692DD /* PersonalVenue.m */,
+				BD88E3891B9A3777000692DD /* PersonalVenueList.xcdatamodeld */,
 				BD6CC2FD1B9932BE0088F18F /* DataManager.h */,
 				BD6CC2FE1B9932BE0088F18F /* DataManager.m */,
 				BD3254891B8F425500C657F4 /* Constants.h */,
@@ -332,6 +340,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD88E38E1B9A3E1E000692DD /* PersonalVenue.m in Sources */,
 				BD3254911B8F5DF900C657F4 /* VenuesTableViewController.m in Sources */,
 				BD3254691B8F41DB00C657F4 /* AppDelegate.m in Sources */,
 				BDA421861B98BCD100844025 /* LikedVenuesTableViewController.m in Sources */,
@@ -341,6 +350,7 @@
 				BDA421831B954BDD00844025 /* VenueTableViewCell.m in Sources */,
 				BD6CC2FF1B9932BE0088F18F /* DataManager.m in Sources */,
 				BDA421771B8FEDEC00844025 /* FourSquareAPI.m in Sources */,
+				BD88E38B1B9A3777000692DD /* PersonalVenueList.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -551,6 +561,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		BD88E3891B9A3777000692DD /* PersonalVenueList.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				BD88E38A1B9A3777000692DD /* PersonalVenueList.xcdatamodel */,
+			);
+			currentVersion = BD88E38A1B9A3777000692DD /* PersonalVenueList.xcdatamodel */;
+			path = PersonalVenueList.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = BD3254581B8F41DB00C657F4 /* Project object */;
 }

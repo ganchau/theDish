@@ -7,6 +7,9 @@
 //
 
 #import "LikedVenuesTableViewController.h"
+#import "VenueTableViewCell.h"
+
+NSString *const MY_REUSE_ID = @"myVenueRID";
 
 @interface LikedVenuesTableViewController ()
 
@@ -50,15 +53,15 @@
     return 0;
 }
 
-/*
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    VenueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MY_REUSE_ID forIndexPath:indexPath];
     
     // Configure the cell...
     
     return cell;
 }
-*/
+
 
 /*
 // Override to support conditional editing of the table view.
