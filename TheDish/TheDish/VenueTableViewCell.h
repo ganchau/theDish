@@ -8,7 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+@class VenueTableViewCell;
+
+@protocol VenueTableViewCellDelegate
+@optional
+- (void)likeButtonWasTapped:(VenueTableViewCell *)cell;
+- (void)dislikeButtonWasTapped:(VenueTableViewCell *)cell;
+@end
+
 @interface VenueTableViewCell : UITableViewCell
+
+@property (weak, nonatomic) id<VenueTableViewCellDelegate> delegate;
 
 @property (weak, nonatomic) IBOutlet UIImageView *venuePhoto;
 @property (weak, nonatomic) IBOutlet UILabel *venueName;
@@ -17,3 +27,5 @@
 @property (weak, nonatomic) IBOutlet UIButton *dislikeButton;
 
 @end
+
+

@@ -33,6 +33,7 @@
     
     if (self) {
         self.venuesList = [@[] mutableCopy];
+        self.personalVenuesList = @[];
     }
     
     return self;

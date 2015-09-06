@@ -12,6 +12,7 @@
 @interface DataManager : NSObject
 
 @property (nonatomic, strong) NSMutableArray *venuesList;
+@property (nonatomic, strong) NSArray *personalVenuesList;
 @property (nonatomic, strong, readonly) NSManagedObjectContext *managedObjectContext;
 
 + (instancetype)sharedDataManager;

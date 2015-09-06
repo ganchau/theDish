@@ -8,10 +8,14 @@
 
 #import "LikedVenuesTableViewController.h"
 #import "VenueTableViewCell.h"
+#import "DataManager.h"
 
 NSString *const MY_REUSE_ID = @"myVenueRID";
 
 @interface LikedVenuesTableViewController ()
+
+@property (nonatomic, strong) DataManager *dataManager;
+@property (nonatomic, strong) NSMutableArray *venuesImages;
 
 @end
 
@@ -27,6 +31,7 @@ NSString *const MY_REUSE_ID = @"myVenueRID";
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
  
     [self initialSetup];
+    [self setupPersonalVenueData];
 }
 
 - (void)initialSetup
@@ -41,6 +46,14 @@ NSString *const MY_REUSE_ID = @"myVenueRID";
     self.navigationItem.title = @"The Dish";
 }
 
+- (void)setupPersonalVenueData
+{
+    NSFetchRequest *personalVenueFetch = [[NSFetchRequest alloc] initWithEntityName:@"PersonalVenue"];
+    self.dataManager = [DataManager sharedDataManager];
+    self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
+                                                                                               error:nil];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -50,7 +63,7 @@ NSString *const MY_REUSE_ID = @"myVenueRID";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return 0;
+    return self.dataManager.personalVenuesList.count;
 }
 
 
