@@ -18,7 +18,6 @@
 
 - (void)awakeFromNib {
     // Initialization code
-    self.isLiked = NO;
     self.likeButton.layer.cornerRadius = 15;
     self.dislikeButton.layer.cornerRadius = 15;
 }
@@ -31,28 +30,12 @@
 
 - (IBAction)likeButtonTapped:(id)sender
 {
-    if (self.isLiked) {
-        self.likeButton.backgroundColor = [UIColor clearColor];
-        self.isLiked = NO;
-    } else {
-        self.likeButton.backgroundColor = [UIColor greenColor];
-        self.dislikeButton.backgroundColor = [UIColor clearColor];
-        self.isLiked = YES;
-    }
-    
+    [self.delegate likeButtonWasTapped:self];
 }
 
 - (IBAction)dislikeButtonTapped:(id)sender
 {
-    if (self.isLiked) {
-        self.dislikeButton.backgroundColor = [UIColor redColor];
-        self.likeButton.backgroundColor = [UIColor clearColor];
-        self.isLiked = NO;
-    } else {
-        self.dislikeButton.backgroundColor = [UIColor clearColor];
-        self.isLiked = YES;
-    }
-    
+    [self.delegate dislikeButtonWasTapped:self];
 }
 
 @end

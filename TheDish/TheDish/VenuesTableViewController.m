@@ -11,13 +11,14 @@
 #import "DataManager.h"
 #import "FourSquareAPI.h"
 #import "Venue.h"
+#import "PersonalVenue.h"
 #import <SVProgressHUD/SVProgressHUD.h>
 #import <CoreLocation/CoreLocation.h>
 #import "Constants.h"
 
 NSString *const REUSE_ID = @"venueRID";
 
-@interface VenuesTableViewController () <CLLocationManagerDelegate>
+@interface VenuesTableViewController () <CLLocationManagerDelegate, VenueTableViewCellDelegate>
 
 @property (nonatomic, strong) DataManager *dataManager;
 @property (nonatomic, strong) NSMutableArray *venuesImages;
@@ -96,6 +97,7 @@ NSString *const REUSE_ID = @"venueRID";
             NSLog(@"Success!!!");
             for (NSDictionary *venueObject in responseObject) {
                 Venue *venue = [[Venue alloc] initWithVenue:venueObject];
+
                 [self.dataManager.venuesList addObject:venue];
             }
             [self.tableView reloadData]; // must reload the table when info is fetched
@@ -169,6 +171,7 @@ NSString *const REUSE_ID = @"venueRID";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     VenueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:REUSE_ID forIndexPath:indexPath];
+    cell.delegate = self;
     
     // Configure the cell...
     NSUInteger currentRow = indexPath.row;
@@ -235,6 +238,106 @@ NSString *const REUSE_ID = @"venueRID";
     return cell;
 }
 
+#pragma mark - VenueTableViewCell delegate methods
+
+- (void)likeButtonWasTapped:(VenueTableViewCell *)cell
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    __block BOOL venueExists = NO;
+    
+    // currently selected venue
+    Venue *currentVenue = self.dataManager.venuesList[indexPath.row];
+
+    // fetch arrays of personal venue from persistent data
+    NSFetchRequest *personalVenueFetch = [[NSFetchRequest alloc] initWithEntityName:@"PersonalVenue"];
+    self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
+                                                                                               error:nil];
+    NSLog(@"personal venue list: %@", self.dataManager.personalVenuesList);
+    [self.dataManager.personalVenuesList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        PersonalVenue *personalVenue = (PersonalVenue *)obj;
+        
+        if ([personalVenue.venueID isEqualToString:currentVenue.venueID]) {
+            venueExists = YES;
+            NSLog(@"personal venue exists");
+            
+            if (personalVenue.liked == YES) {
+                [self.dataManager.managedObjectContext deleteObject:personalVenue];
+                cell.likeButton.backgroundColor = [UIColor clearColor];
+            } else {
+                cell.likeButton.backgroundColor = [UIColor greenColor];
+                cell.dislikeButton.backgroundColor = [UIColor clearColor];
+                personalVenue.liked = YES;
+            }
+            *stop = YES;
+        }
+    }];
+    
+    if (!venueExists) {
+        NSLog(@"no personal venue exists");
+        PersonalVenue *personalVenue = [NSEntityDescription insertNewObjectForEntityForName:@"PersonalVenue"
+                                                                     inManagedObjectContext:self.dataManager.managedObjectContext];
+        personalVenue.liked = YES;
+        personalVenue.venueID = currentVenue.venueID;
+        NSLog(@"inserted into managed context: %@", personalVenue);
+    }
+    
+    [self.dataManager saveContext];
+}
+
+- (void)dislikeButtonWasTapped:(VenueTableViewCell *)cell
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    __block BOOL venueExists = NO;
+    
+    // currently selected venue
+    Venue *currentVenue = self.dataManager.venuesList[indexPath.row];
+    
+    // fetch arrays of personal venue from persistent data
+    NSFetchRequest *personalVenueFetch = [[NSFetchRequest alloc] initWithEntityName:@"PersonalVenue"];
+    self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
+                                                                                               error:nil];
+    NSLog(@"personal venue list: %@", self.dataManager.personalVenuesList);
+    [self.dataManager.personalVenuesList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        PersonalVenue *personalVenue = (PersonalVenue *)obj;
+        
+        if ([personalVenue.venueID isEqualToString:currentVenue.venueID]) {
+            venueExists = YES;
+            NSLog(@"personal venue exists");
+            
+            if (personalVenue.disliked == YES) {
+                [self.dataManager.managedObjectContext deleteObject:personalVenue];
+                cell.dislikeButton.backgroundColor = [UIColor clearColor];
+            } else {
+                cell.likeButton.backgroundColor = [UIColor clearColor];
+                cell.dislikeButton.backgroundColor = [UIColor redColor];
+                personalVenue.disliked = YES;
+            }
+            *stop = YES;
+        }
+    }];
+    
+    if (!venueExists) {
+        NSLog(@"no personal venue exists");
+        PersonalVenue *personalVenue = [NSEntityDescription insertNewObjectForEntityForName:@"PersonalVenue"
+                                                                     inManagedObjectContext:self.dataManager.managedObjectContext];
+        personalVenue.disliked = YES;
+        personalVenue.venueID = currentVenue.venueID;
+        NSLog(@"inserted into managed context: %@", personalVenue);
+    }
+    
+    [self.dataManager saveContext];
+    
+    
+    // ...do something to trigger venue dislike on or off
+//    if (self.isLiked) {
+//        self.dislikeButton.backgroundColor = [UIColor redColor];
+//        self.likeButton.backgroundColor = [UIColor clearColor];
+//        self.isLiked = NO;
+//    } else {
+//        self.dislikeButton.backgroundColor = [UIColor clearColor];
+//        self.isLiked = YES;
+//    }
+}
 
 /*
  // Override to support conditional editing of the table view.

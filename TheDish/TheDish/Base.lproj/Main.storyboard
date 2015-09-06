@@ -52,7 +52,7 @@
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                             <connections>
-                                                <action selector="dislikeButtonTapped:" destination="rgA-LF-fqA" eventType="touchUpInside" id="zXb-81-0KB"/>
+                                                <action selector="dislikeButtonTapped:" destination="rgA-LF-fqA" eventType="touchUpInside" id="Ets-co-OGj"/>
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uu9-Qf-4Cd">
@@ -72,7 +72,7 @@
                                                 </mask>
                                             </variation>
                                             <connections>
-                                                <action selector="likeButtonTapped:" destination="rgA-LF-fqA" eventType="touchUpInside" id="T35-0M-qGz"/>
+                                                <action selector="likeButtonTapped:" destination="rgA-LF-fqA" eventType="touchUpInside" id="Ndi-se-OQH"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -121,12 +121,12 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="300" id="7Cl-ry-HLe">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="myVenueRID" rowHeight="300" id="7Cl-ry-HLe" customClass="PersonalVenueTableViewCell">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7Cl-ry-HLe" id="qfQ-HH-KX6">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="W1H-7m-xBr">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="W1H-7m-xBr">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="200"/>
                                             <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
@@ -161,6 +161,11 @@
                                         <constraint firstItem="ihk-g5-iOm" firstAttribute="trailing" secondItem="qfQ-HH-KX6" secondAttribute="trailingMargin" id="yPj-PC-PQW"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="venueAddress" destination="tYj-yg-0fz" id="5ir-bk-nZm"/>
+                                    <outlet property="venueName" destination="ihk-g5-iOm" id="OxO-av-xWz"/>
+                                    <outlet property="venuePhoto" destination="W1H-7m-xBr" id="9aK-ZA-Vh8"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
