@@ -58,6 +58,7 @@ NSString *const REUSE_ID = @"venueRID";
                                                                         alpha:1];
     self.navigationController.navigationBar.titleTextAttributes = @{ NSForegroundColorAttributeName : [UIColor whiteColor]};
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
+    self.navigationController.navigationBar.translucent = NO;
     self.navigationItem.title = @"The Dish";
 
 }
@@ -261,12 +262,14 @@ NSString *const REUSE_ID = @"venueRID";
             NSLog(@"personal venue exists");
             
             if (personalVenue.liked == YES) {
+                NSLog(@"remove personal venue");
                 [self.dataManager.managedObjectContext deleteObject:personalVenue];
                 cell.likeButton.backgroundColor = [UIColor clearColor];
             } else {
                 cell.likeButton.backgroundColor = [UIColor greenColor];
                 cell.dislikeButton.backgroundColor = [UIColor clearColor];
                 personalVenue.liked = YES;
+                personalVenue.disliked = NO;
             }
             *stop = YES;
         }
@@ -277,6 +280,8 @@ NSString *const REUSE_ID = @"venueRID";
         PersonalVenue *personalVenue = [NSEntityDescription insertNewObjectForEntityForName:@"PersonalVenue"
                                                                      inManagedObjectContext:self.dataManager.managedObjectContext];
         personalVenue.liked = YES;
+        cell.likeButton.backgroundColor = [UIColor greenColor];
+        cell.dislikeButton.backgroundColor = [UIColor clearColor];
         personalVenue.venueID = currentVenue.venueID;
         NSLog(@"inserted into managed context: %@", personalVenue);
     }
@@ -311,6 +316,7 @@ NSString *const REUSE_ID = @"venueRID";
                 cell.likeButton.backgroundColor = [UIColor clearColor];
                 cell.dislikeButton.backgroundColor = [UIColor redColor];
                 personalVenue.disliked = YES;
+                personalVenue.liked = NO;
             }
             *stop = YES;
         }
@@ -321,6 +327,8 @@ NSString *const REUSE_ID = @"venueRID";
         PersonalVenue *personalVenue = [NSEntityDescription insertNewObjectForEntityForName:@"PersonalVenue"
                                                                      inManagedObjectContext:self.dataManager.managedObjectContext];
         personalVenue.disliked = YES;
+        cell.dislikeButton.backgroundColor = [UIColor redColor];
+        cell.likeButton.backgroundColor = [UIColor clearColor];
         personalVenue.venueID = currentVenue.venueID;
         NSLog(@"inserted into managed context: %@", personalVenue);
     }

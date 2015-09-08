@@ -36,13 +36,16 @@ NSString *const MY_REUSE_ID = @"myVenueRID";
     [self initialSetup];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self setupPersonalVenueData];
 }
 
 - (void)initialSetup
 {
+    self.venuesImages = [@[] mutableCopy];
+
     // set up the navigation bar properties
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:255.0/255.0
                                                                            green:61.0/255.0
@@ -50,7 +53,8 @@ NSString *const MY_REUSE_ID = @"myVenueRID";
                                                                            alpha:1];
     self.navigationController.navigationBar.titleTextAttributes = @{ NSForegroundColorAttributeName : [UIColor whiteColor]};
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
-    self.navigationItem.title = @"The Dish";
+    self.navigationController.navigationBar.translucent = NO;
+    //self.navigationItem.title = @"The Dish";
 }
 
 - (void)setupPersonalVenueData
@@ -85,7 +89,7 @@ NSString *const MY_REUSE_ID = @"myVenueRID";
     cell.venuePhoto.image = placeholderImage;
     PersonalVenue *personalVenue = self.dataManager.personalVenuesList[currentRow];
     cell.venueName.text = personalVenue.venueID;
-    
+    NSLog(@"Personal Venues Count : %lu", self.venuesImages.count);
     if (self.venuesImages.count > currentRow) {
         cell.venuePhoto.image = self.venuesImages[currentRow];
     } else {

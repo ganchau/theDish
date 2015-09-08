@@ -173,7 +173,18 @@
                             <outlet property="delegate" destination="6v2-oP-st2" id="4nN-yW-bCv"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="bne-oI-HWK"/>
+                    <navigationItem key="navigationItem" id="bne-oI-HWK">
+                        <nil key="title"/>
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="UDL-LW-PVI">
+                            <rect key="frame" x="16" y="7" width="568" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segments>
+                                <segment title="Likes"/>
+                                <segment title="Dislikes"/>
+                            </segments>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </segmentedControl>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CZH-oa-RZp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
