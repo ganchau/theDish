@@ -58,6 +58,7 @@ NSString *const REUSE_ID = @"venueRID";
                                                                         alpha:1];
     self.navigationController.navigationBar.titleTextAttributes = @{ NSForegroundColorAttributeName : [UIColor whiteColor]};
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
+    self.navigationController.navigationBar.translucent = NO;
     self.navigationItem.title = @"The Dish";
 
 }
@@ -268,6 +269,7 @@ NSString *const REUSE_ID = @"venueRID";
                 cell.likeButton.backgroundColor = [UIColor greenColor];
                 cell.dislikeButton.backgroundColor = [UIColor clearColor];
                 personalVenue.liked = YES;
+                personalVenue.disliked = NO;
             }
             *stop = YES;
         }
@@ -314,6 +316,7 @@ NSString *const REUSE_ID = @"venueRID";
                 cell.likeButton.backgroundColor = [UIColor clearColor];
                 cell.dislikeButton.backgroundColor = [UIColor redColor];
                 personalVenue.disliked = YES;
+                personalVenue.liked = NO;
             }
             *stop = YES;
         }
