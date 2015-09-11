@@ -68,6 +68,23 @@
     [requestOperation start];
 }
 
++ (void)setImageWithURL:(NSString *)URLString ImageView:(UIImageView *)imageView Completion:(void (^)(BOOL, UIImage *))completionBlock
+{
+    NSURL *URL = [NSURL URLWithString:URLString];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:URL];
+    UIImage *placeholder = [UIImage imageNamed:@"placeholder"];
+    
+//    [imageView setImageWithURL:URL placeholderImage:placeholder];
+    [imageView setImageWithURLRequest:request
+                     placeholderImage:[UIImage imageNamed:@"placeholder"]
+                              success:^(NSURLRequest * _Nonnull request, NSHTTPURLResponse * _Nonnull response, UIImage * _Nonnull image) {
+                                  imageView.image = image;
+                                  completionBlock(YES, image);
+                              } failure:^(NSURLRequest * _Nonnull request, NSHTTPURLResponse * _Nonnull response, NSError * _Nonnull error) {
+                                  completionBlock(NO, placeholder);
+                              }];
+}
+
 + (NSString *)formatDate
 {
     NSDate *date = [NSDate date];
