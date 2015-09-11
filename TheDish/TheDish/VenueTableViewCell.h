@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *venueAddress;
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
 @property (weak, nonatomic) IBOutlet UIButton *dislikeButton;
+@property (strong, nonatomic) NSString *venueID;
 
 @end
 

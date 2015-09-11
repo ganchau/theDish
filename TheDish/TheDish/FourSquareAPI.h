@@ -17,4 +17,6 @@
 
 + (void)getImageWithURL:(NSString *)URLString Completion:(void (^)(BOOL success, UIImage *image, NSError *error))completionBlock;
 
++ (void)setImageWithURL:(NSString *)URLString ImageView:(UIImageView *)imageView Completion:(void (^)(BOOL success, UIImage *image))completionBlock;
+
 @end
