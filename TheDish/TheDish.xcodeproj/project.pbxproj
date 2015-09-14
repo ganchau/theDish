@@ -165,11 +165,11 @@
 		BD32548C1B8F426400C657F4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				BD88E3891B9A3777000692DD /* PersonalVenueList.xcdatamodeld */,
 				BD584E421BA6230700A9912A /* PersonalVenue+CoreDataProperties.h */,
 				BD584E431BA6230700A9912A /* PersonalVenue+CoreDataProperties.m */,
 				BD584E441BA6230700A9912A /* PersonalVenue.h */,
 				BD584E451BA6230700A9912A /* PersonalVenue.m */,
-				BD88E3891B9A3777000692DD /* PersonalVenueList.xcdatamodeld */,
 				BD6CC2FD1B9932BE0088F18F /* DataManager.h */,
 				BD6CC2FE1B9932BE0088F18F /* DataManager.m */,
 				BD3254891B8F425500C657F4 /* Constants.h */,
