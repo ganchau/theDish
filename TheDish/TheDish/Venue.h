@@ -12,7 +12,7 @@
 @interface Venue : NSObject
 
 @property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSArray *address;
+@property (nonatomic, strong) NSString *address;
 @property (nonatomic, strong) NSString *venueID;
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic) BOOL liked;
@@ -21,5 +21,8 @@
 - (instancetype)initWithVenue:(NSDictionary *)venue;
 
 // make a method that reads core data personal venue id for likes and dislikes to display in table view cell
+- (NSString *)fetchVenueNameWithID:(NSString *)venueID;
+- (BOOL)fetchVenueLikedWithID:(NSString *)venueID;
+- (BOOL)fetchVenueDislikedWithID:(NSString *)venueID;
 
 @end

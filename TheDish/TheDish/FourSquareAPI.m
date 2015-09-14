@@ -73,12 +73,12 @@
     NSURL *URL = [NSURL URLWithString:URLString];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:URL];
     UIImage *placeholder = [UIImage imageNamed:@"placeholder"];
+    __weak UIImageView *weakImageView = imageView;
     
-//    [imageView setImageWithURL:URL placeholderImage:placeholder];
     [imageView setImageWithURLRequest:request
-                     placeholderImage:[UIImage imageNamed:@"placeholder"]
+                     placeholderImage:placeholder
                               success:^(NSURLRequest * _Nonnull request, NSHTTPURLResponse * _Nonnull response, UIImage * _Nonnull image) {
-                                  imageView.image = image;
+                                  weakImageView.image = image;
                                   completionBlock(YES, image);
                               } failure:^(NSURLRequest * _Nonnull request, NSHTTPURLResponse * _Nonnull response, NSError * _Nonnull error) {
                                   completionBlock(NO, placeholder);

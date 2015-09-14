@@ -18,8 +18,8 @@
 
 - (void)awakeFromNib {
     // Initialization code
-    self.likeButton.layer.cornerRadius = 15;
-    self.dislikeButton.layer.cornerRadius = 15;
+    self.likeButton.layer.cornerRadius = 20;
+    self.dislikeButton.layer.cornerRadius = 20;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

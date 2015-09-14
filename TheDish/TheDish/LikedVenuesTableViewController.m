@@ -10,7 +10,7 @@
 #import "PersonalVenueTableViewCell.h"
 #import "DataManager.h"
 #import "FourSquareAPI.h"
-#import "PersonalVenue.h"
+#import "PersonalVenue+CoreDataProperties.h"
 #import "Constants.h"
 
 NSString *const MY_REUSE_ID = @"myVenueRID";
@@ -55,6 +55,8 @@ NSString *const MY_REUSE_ID = @"myVenueRID";
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     self.navigationController.navigationBar.translucent = NO;
     //self.navigationItem.title = @"The Dish";
+    
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 - (void)setupPersonalVenueData
@@ -84,60 +86,57 @@ NSString *const MY_REUSE_ID = @"myVenueRID";
     PersonalVenueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:MY_REUSE_ID forIndexPath:indexPath];
     
     // Configure the cell...
+    
     NSUInteger currentRow = indexPath.row;
-    UIImage *placeholderImage = [UIImage imageNamed:@"placeholder"];
-    cell.venuePhoto.image = placeholderImage;
+    
     PersonalVenue *personalVenue = self.dataManager.personalVenuesList[currentRow];
-    cell.venueName.text = personalVenue.venueID;
-    NSLog(@"Personal Venues Count : %lu", self.venuesImages.count);
-    if (self.venuesImages.count > currentRow) {
-        cell.venuePhoto.image = self.venuesImages[currentRow];
+    
+    cell.venueName.text = personalVenue.name;
+    cell.venueID = personalVenue.venueID;
+    cell.venueAddress.text = personalVenue.address;
+    cell.venuePhoto.alpha = 0;
+    
+    if (personalVenue.image) {
+        cell.venuePhoto.alpha = 1;
+        cell.venuePhoto.image = [UIImage imageWithData:personalVenue.image];
     } else {
-        cell.venuePhoto.alpha = 0;
         [FourSquareAPI getVenuesPhotosWithVenueID:personalVenue.venueID
                                        Completion:^(BOOL success, id responseObject, NSError *error) {
                                            if (success) {
-                                               NSString *prefixURL = [responseObject[@"items"] firstObject][@"prefix"];
-                                               NSString *suffixURL = [responseObject[@"items"] firstObject][@"suffix"];
-                                               if (prefixURL != nil && suffixURL != nil) {
-                                                   NSString *imageURL = [NSString stringWithFormat:@"%@%@%@", prefixURL, IMAGE_SIZE, suffixURL];
-                                                   NSLog(@"URL for photo: %@", imageURL);
-                                                   
-                                                   [FourSquareAPI getImageWithURL:imageURL
-                                                                       Completion:^(BOOL success, UIImage *image, NSError *error) {
-                                                                           if (success) {
-                                                                               [self.venuesImages addObject:image];
-                                                                               cell.venuePhoto.image = image;
-                                                                               
-                                                                               [UIView animateWithDuration:0.3
-                                                                                                animations:^{
-                                                                                                    cell.venuePhoto.alpha = 1;
-                                                                                                    [self.view layoutIfNeeded];
-                                                                                                }];
-                                                                           } else {
-                                                                               NSLog(@"Error getting image: %@", error.description);
-                                                                               [self.venuesImages addObject:placeholderImage];
-                                                                               
-                                                                               [UIView animateWithDuration:0.3
-                                                                                                animations:^{
-                                                                                                    cell.venuePhoto.alpha = 1;
-                                                                                                    [self.view layoutIfNeeded];
-                                                                                                }];
-                                                                           }
-                                                                       }];
-                                               } else {
-                                                   NSLog(@"Venue has no photo.");
-                                                   [self.venuesImages addObject:placeholderImage];
-                                                   
-                                                   [UIView animateWithDuration:0.3
-                                                                    animations:^{
-                                                                        cell.venuePhoto.alpha = 1;
-                                                                        [self.view layoutIfNeeded];
-                                                                    }];
+                                               // check if current venue id and cell's venue id gets out of sync
+                                               if(![cell.venueID isEqualToString:personalVenue.venueID]) {
+                                                   NSLog(@"Ah! The cell got changed out from underneath us!");
+                                                   return;
                                                }
                                                
-                                           } else {
-                                               NSLog(@"Error getting photo data from venue: %@", error.description);
+                                               NSString *prefixURL = [responseObject[@"items"] firstObject][@"prefix"];
+                                               NSString *suffixURL = [responseObject[@"items"] firstObject][@"suffix"];
+                                               
+                                               NSString *imageURL = [NSString stringWithFormat:@"%@%@%@", prefixURL, IMAGE_SIZE, suffixURL];
+                                               __weak PersonalVenueTableViewCell *weakCell = cell;
+                                               
+                                               [FourSquareAPI setImageWithURL:imageURL
+                                                                    ImageView:cell.venuePhoto
+                                                                   Completion:^(BOOL success, UIImage *image) {
+                                                                       if (success) {
+                                                                           personalVenue.image = UIImagePNGRepresentation(image);
+                                                                           [UIView animateWithDuration:0.3
+                                                                                            animations:^{
+                                                                                                weakCell.venuePhoto.alpha = 1;
+                                                                                                [self.view layoutIfNeeded];
+                                                                                            }];
+                                                                           [weakCell setNeedsDisplay];
+                                                                       } else {
+                                                                           // if completion block is not successful, it will return a placholder image
+                                                                           personalVenue.image = UIImagePNGRepresentation(image);
+                                                                           [UIView animateWithDuration:0.3
+                                                                                            animations:^{
+                                                                                                weakCell.venuePhoto.alpha = 1;
+                                                                                                [self.view layoutIfNeeded];
+                                                                                            }];
+                                                                           [weakCell setNeedsDisplay];
+                                                                       }
+                                                                   }];
                                            }
                                        }];
     }

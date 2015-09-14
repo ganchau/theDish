@@ -60,7 +60,8 @@ NSString *const REUSE_ID = @"venueRID";
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     self.navigationController.navigationBar.translucent = NO;
     self.navigationItem.title = @"The Dish";
-
+    
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 #pragma mark - Setting Up Progress View
@@ -178,21 +179,15 @@ NSString *const REUSE_ID = @"venueRID";
     // Configure the cell...
     
     NSUInteger currentRow = indexPath.row;
-
-//    UIImage *placeholderImage = [UIImage imageNamed:@"placeholder"];
-//    cell.venuePhoto.image = placeholderImage;
    
     Venue *venue = self.dataManager.venuesList[currentRow];
     cell.venueName.text = venue.name;
     cell.venueID = venue.venueID;
+    cell.venueAddress.text = venue.address;
+    NSLog(@"%@", venue.address);
+    cell.venuePhoto.alpha = 0;
     
-//    if (self.venuesImages.count > currentRow) {
-//        cell.venuePhoto.image = self.venuesImages[currentRow];
-//    } else {
-    
-    __weak VenueTableViewCell *weakCell = cell;
-    
-    weakCell.venuePhoto.alpha = 0;
+    NSLog(@"VENUE NAME: %@", [venue fetchVenueNameWithID:venue.venueID]);
     
     if (venue.image) {
         cell.venuePhoto.alpha = 1;
@@ -201,7 +196,8 @@ NSString *const REUSE_ID = @"venueRID";
         [FourSquareAPI getVenuesPhotosWithVenueID:venue.venueID
                                        Completion:^(BOOL success, id responseObject, NSError *error) {
                                            if (success) {
-                                               if(![weakCell.venueID isEqualToString:venue.venueID]) {
+                                               // check if current venue id and cell's venue id gets out of sync
+                                               if(![cell.venueID isEqualToString:venue.venueID]) {
                                                    NSLog(@"Ah! The cell got changed out from underneath us!");
                                                    return;
                                                }
@@ -209,79 +205,34 @@ NSString *const REUSE_ID = @"venueRID";
                                                NSString *prefixURL = [responseObject[@"items"] firstObject][@"prefix"];
                                                NSString *suffixURL = [responseObject[@"items"] firstObject][@"suffix"];
                                                
-                                               if (prefixURL && suffixURL) {
-                                                   NSString *imageURL = [NSString stringWithFormat:@"%@%@%@", prefixURL, IMAGE_SIZE, suffixURL];
-                                                   [FourSquareAPI setImageWithURL:imageURL
-                                                                        ImageView:cell.venuePhoto
-                                                                       Completion:^(BOOL success, UIImage *image) {
-                                                                           if (success) {
-                                                                               venue.image = image;
-//                                                                               self.dataManager.venuesList[currentRow] = venue;
-                                                                               [UIView animateWithDuration:0.3
-                                                                                                animations:^{
-                                                                                                    weakCell.venuePhoto.alpha = 1;
-                                                                                                    [self.view layoutIfNeeded];
-                                                                                                }];
-                                                                               [weakCell setNeedsDisplay];
-                                                                           } else {
-                                                                               venue.image = image;
-//                                                                               self.dataManager.venuesList[currentRow] = venue;
-                                                                           }
-                                                                       }];
-                                               }
+                                               NSString *imageURL = [NSString stringWithFormat:@"%@%@%@", prefixURL, IMAGE_SIZE, suffixURL];
+                                               __weak VenueTableViewCell *weakCell = cell;
+                                               
+                                               [FourSquareAPI setImageWithURL:imageURL
+                                                                    ImageView:cell.venuePhoto
+                                                                   Completion:^(BOOL success, UIImage *image) {
+                                                                       if (success) {
+                                                                           venue.image = image;
+                                                                           [UIView animateWithDuration:0.3
+                                                                                            animations:^{
+                                                                                                weakCell.venuePhoto.alpha = 1;
+                                                                                                [self.view layoutIfNeeded];
+                                                                                            }];
+                                                                           [weakCell setNeedsDisplay];
+                                                                       } else {
+                                                                           // if completion block is not successful, it will return a placholder image
+                                                                           venue.image = image;
+                                                                           [UIView animateWithDuration:0.3
+                                                                                            animations:^{
+                                                                                                weakCell.venuePhoto.alpha = 1;
+                                                                                                [self.view layoutIfNeeded];
+                                                                                            }];
+                                                                           [weakCell setNeedsDisplay];
+                                                                       }
+                                                                   }];
                                            }
                                        }];
     }
-//        [FourSquareAPI getVenuesPhotosWithVenueID:venue.venueID
-//                                       Completion:^(BOOL success, id responseObject, NSError *error) {
-//                                           if (success) {
-//                                               NSString *prefixURL = [responseObject[@"items"] firstObject][@"prefix"];
-//                                               NSString *suffixURL = [responseObject[@"items"] firstObject][@"suffix"];
-//                                               if (prefixURL != nil && suffixURL != nil) {
-//                                                   NSString *imageURL = [NSString stringWithFormat:@"%@%@%@", prefixURL, IMAGE_SIZE, suffixURL];
-//                                                   NSLog(@"URL for photo: %@", imageURL);
-//                                                   
-//                                                   [FourSquareAPI getImageWithURL:imageURL
-//                                                                       Completion:^(BOOL success, UIImage *image, NSError *error) {
-//                                                                           if (success) {
-//                                                                               [self.venuesImages addObject:image];
-//                                                                               cell.venuePhoto.image = image;
-//                                                                               
-//                                                                               [UIView animateWithDuration:0.3
-//                                                                                                animations:^{
-//                                                                                                    cell.venuePhoto.alpha = 1;
-//                                                                                                    [self.view layoutIfNeeded];
-//                                                                                                }];
-//                                                                           } else {
-//                                                                               NSLog(@"Error getting image: %@", error.description);
-//                                                                               [self.venuesImages addObject:placeholderImage];
-//                                                                               
-//                                                                               [UIView animateWithDuration:0.3
-//                                                                                                animations:^{
-//                                                                                                    cell.venuePhoto.alpha = 1;
-//                                                                                                    [self.view layoutIfNeeded];
-//                                                                                                }];
-//                                                                           }
-//                                                                       }];
-//                                               } else {
-//                                                   NSLog(@"Venue has no photo.");
-//                                                   [self.venuesImages addObject:placeholderImage];
-//                                                   
-//                                                   [UIView animateWithDuration:0.3
-//                                                                    animations:^{
-//                                                                        cell.venuePhoto.alpha = 1;
-//                                                                        [self.view layoutIfNeeded];
-//                                                                    }];
-//                                               }
-//                                               
-//                                           } else {
-//                                               NSLog(@"Error getting photo data from venue: %@", error.description);
-//                                           }
-//                                       }];
-//    }
-    
-    NSString *address = [venue.address componentsJoinedByString:@", "];
-    cell.venueAddress.text = address;
     
     return cell;
 }
@@ -327,9 +278,12 @@ NSString *const REUSE_ID = @"venueRID";
         PersonalVenue *personalVenue = [NSEntityDescription insertNewObjectForEntityForName:@"PersonalVenue"
                                                                      inManagedObjectContext:self.dataManager.managedObjectContext];
         personalVenue.liked = YES;
+        personalVenue.venueID = currentVenue.venueID;
+        personalVenue.name = currentVenue.name;
+        personalVenue.address = currentVenue.address;
+
         cell.likeButton.backgroundColor = [UIColor greenColor];
         cell.dislikeButton.backgroundColor = [UIColor clearColor];
-        personalVenue.venueID = currentVenue.venueID;
         NSLog(@"inserted into managed context: %@", personalVenue);
     }
     
@@ -374,9 +328,12 @@ NSString *const REUSE_ID = @"venueRID";
         PersonalVenue *personalVenue = [NSEntityDescription insertNewObjectForEntityForName:@"PersonalVenue"
                                                                      inManagedObjectContext:self.dataManager.managedObjectContext];
         personalVenue.disliked = YES;
+        personalVenue.venueID = currentVenue.venueID;
+        personalVenue.name = currentVenue.name;
+        personalVenue.address = currentVenue.address;
+
         cell.dislikeButton.backgroundColor = [UIColor redColor];
         cell.likeButton.backgroundColor = [UIColor clearColor];
-        personalVenue.venueID = currentVenue.venueID;
         NSLog(@"inserted into managed context: %@", personalVenue);
     }
     
