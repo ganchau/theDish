@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14F27" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="8195" systemVersion="15A282b" minimumToolsVersion="Xcode 4.3">
     <entity name="PersonalVenue" representedClassName="PersonalVenue" syncable="YES">
+        <attribute name="address" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="disliked" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="liked" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="venueID" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="PersonalVenue" positionX="-54" positionY="-9" width="128" height="90"/>
+        <element name="PersonalVenue" positionX="-54" positionY="-9" width="128" height="135"/>
     </elements>
 </model>

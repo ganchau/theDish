@@ -13,5 +13,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *venuePhoto;
 @property (weak, nonatomic) IBOutlet UILabel *venueName;
 @property (weak, nonatomic) IBOutlet UILabel *venueAddress;
+@property (strong, nonatomic) NSString *venueID;
+
 
 @end

@@ -2,18 +2,21 @@
 //  PersonalVenue.h
 //  TheDish
 //
-//  Created by Gan Chau on 9/4/15.
-//  Copyright (c) 2015 GC App. All rights reserved.
+//  Created by Gan Chau on 9/13/15.
+//  Copyright © 2015 GC App. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface PersonalVenue : NSManagedObject
 
-@property (nonatomic, retain) NSString * venueID;
-@property (nonatomic) BOOL liked;
-@property (nonatomic) BOOL disliked;
+// Insert code here to declare functionality of your managed object subclass
 
 @end
+
+NS_ASSUME_NONNULL_END
+
+#import "PersonalVenue+CoreDataProperties.h"
