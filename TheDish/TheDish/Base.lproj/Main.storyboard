@@ -203,8 +203,14 @@
                                 <segment title="Dislikes"/>
                             </segments>
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="likesDislikesSegmentedControllerTapped:" destination="6v2-oP-st2" eventType="valueChanged" id="Unc-79-JBx"/>
+                            </connections>
                         </segmentedControl>
                     </navigationItem>
+                    <connections>
+                        <outlet property="likesDislikesSegmentedControl" destination="UDL-LW-PVI" id="00u-Ip-As0"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CZH-oa-RZp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

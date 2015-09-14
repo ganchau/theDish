@@ -19,6 +19,7 @@ NSString *const MY_REUSE_ID = @"myVenueRID";
 
 @property (nonatomic, strong) DataManager *dataManager;
 @property (nonatomic, strong) NSMutableArray *venuesImages;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *likesDislikesSegmentedControl;
 
 @end
 
@@ -34,17 +35,19 @@ NSString *const MY_REUSE_ID = @"myVenueRID";
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
  
     [self initialSetup];
+    [self fetchLikedVenues];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self setupPersonalVenueData];
+    [self checkStateOfLikesDislikesSegmentedControl];
 }
 
 - (void)initialSetup
 {
     self.venuesImages = [@[] mutableCopy];
+    self.dataManager = [DataManager sharedDataManager];
 
     // set up the navigation bar properties
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:255.0/255.0
@@ -59,15 +62,14 @@ NSString *const MY_REUSE_ID = @"myVenueRID";
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
-- (void)setupPersonalVenueData
-{
-    NSFetchRequest *personalVenueFetch = [[NSFetchRequest alloc] initWithEntityName:@"PersonalVenue"];
-    self.dataManager = [DataManager sharedDataManager];
-    self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
-                                                                                               error:nil];
-    NSLog(@"what is in here? %@", self.dataManager.personalVenuesList);
-    [self.tableView reloadData];
-}
+//- (void)setupPersonalVenueData
+//{
+//    NSFetchRequest *personalVenueFetch = [[NSFetchRequest alloc] initWithEntityName:@"PersonalVenue"];
+//    self.dataManager = [DataManager sharedDataManager];
+//    self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
+//                                                                                               error:nil];
+//    [self.tableView reloadData];
+//}
 
 #pragma mark - Table view data source
 
@@ -144,6 +146,43 @@ NSString *const MY_REUSE_ID = @"myVenueRID";
     return cell;
 }
 
+- (IBAction)likesDislikesSegmentedControllerTapped:(id)sender
+{
+    [self checkStateOfLikesDislikesSegmentedControl];
+}
+
+- (void)checkStateOfLikesDislikesSegmentedControl
+{
+    if (self.likesDislikesSegmentedControl.selectedSegmentIndex == 0) {
+        NSLog(@"You selected the first segment");
+        
+        [self fetchLikedVenues];
+    } else {
+        NSLog(@"You selected the second segment");
+        
+        [self fetchDislikedVenues];
+    }
+}
+
+- (void)fetchLikedVenues
+{
+    NSFetchRequest *personalVenueFetch = [[NSFetchRequest alloc] initWithEntityName:@"PersonalVenue"];
+    NSPredicate *likedPredicate = [NSPredicate predicateWithFormat:@"liked == %d", YES];
+    personalVenueFetch.predicate = likedPredicate;
+    self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
+                                                                                               error:nil];
+    [self.tableView reloadData];
+}
+
+- (void)fetchDislikedVenues
+{
+    NSFetchRequest *personalVenueFetch = [[NSFetchRequest alloc] initWithEntityName:@"PersonalVenue"];
+    NSPredicate *dislikedPredicate = [NSPredicate predicateWithFormat:@"disliked == %d", YES];
+    personalVenueFetch.predicate = dislikedPredicate;
+    self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
+                                                                                               error:nil];
+    [self.tableView reloadData];
+}
 
 /*
 // Override to support conditional editing of the table view.
