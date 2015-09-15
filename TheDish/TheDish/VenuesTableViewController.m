@@ -21,7 +21,6 @@ NSString *const REUSE_ID = @"venueRID";
 @interface VenuesTableViewController () <CLLocationManagerDelegate, VenueTableViewCellDelegate>
 
 @property (nonatomic, strong) DataManager *dataManager;
-@property (nonatomic, strong) NSMutableArray *venuesImages;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
 - (void)setupProgressHUD;
@@ -49,7 +48,6 @@ NSString *const REUSE_ID = @"venueRID";
 - (void)initialSetup
 {
     self.dataManager = [DataManager sharedDataManager];
-    self.venuesImages = [@[] mutableCopy];
     
     // set up the navigation bar properties
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:255.0/255.0
@@ -96,13 +94,16 @@ NSString *const REUSE_ID = @"venueRID";
             NSLog(@"Success!!!");
             
             [self.dataManager.venuesList removeAllObjects];
-            [self.venuesImages removeAllObjects];
             
             for (NSDictionary *venueObject in responseObject) {
                 Venue *venue = [[Venue alloc] initWithVenue:venueObject];
 
                 [self.dataManager.venuesList addObject:venue];
             }
+            
+            // fetch all personal venues from core data
+            [self fetchPersonalVenueFromPersistentStore];
+            
             [self.tableView reloadData]; // must reload the table when info is fetched
             [SVProgressHUD dismiss];  // dismiss progress animation
             [self.refreshControl endRefreshing];  // end refresh animation
@@ -112,6 +113,15 @@ NSString *const REUSE_ID = @"venueRID";
             [self.refreshControl endRefreshing];  // end refresh animation
         }
     }];
+}
+
+#pragma <#arguments#>
+
+- (void)fetchPersonalVenueFromPersistentStore
+{
+    NSFetchRequest *personalVenueFetch = [[NSFetchRequest alloc] initWithEntityName:@"PersonalVenue"];
+    self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
+                                                                                               error:nil];
 }
 
 #pragma mark - Core Location Manager
@@ -184,15 +194,43 @@ NSString *const REUSE_ID = @"venueRID";
     cell.venueName.text = venue.name;
     cell.venueID = venue.venueID;
     cell.venueAddress.text = venue.address;
-    NSLog(@"%@", venue.address);
     cell.venuePhoto.alpha = 0;
     
-    NSLog(@"VENUE NAME: %@", [venue fetchVenueNameWithID:venue.venueID]);
+    for (PersonalVenue *personalVenue in self.dataManager.personalVenuesList) {
+        [personalVenue fetchVenueLikedOrDislikedWithID:venue.venueID Completion:^(BOOL liked, BOOL disliked, BOOL result) {
+            if (liked) {
+                venue.liked = result;
+                venue.disliked = NO;
+                return;
+            } else if (disliked) {
+                venue.disliked = result;
+                venue.liked = NO;
+                return;
+            }
+        }];
+    }
     
+    NSLog(@"%@ liked :%d", venue.name, venue.liked);
+    NSLog(@"%@ disliked :%d", venue.name, venue.disliked);
+    
+    // update cell's like and dislike button to reflect current venue's data
+    if (venue.liked) {
+        cell.likeButton.backgroundColor = [UIColor greenColor];
+        cell.dislikeButton.backgroundColor = [UIColor clearColor];
+    } else if (venue.disliked) {
+        cell.dislikeButton.backgroundColor = [UIColor redColor];
+        cell.likeButton.backgroundColor = [UIColor clearColor];
+    } else {
+        cell.likeButton.backgroundColor = [UIColor clearColor];
+        cell.dislikeButton.backgroundColor = [UIColor clearColor];
+    }
+    
+    // if venue already has an image, use it
     if (venue.image) {
         cell.venuePhoto.alpha = 1;
         cell.venuePhoto.image = venue.image;
     } else {
+        // make API call to get venue image
         [FourSquareAPI getVenuesPhotosWithVenueID:venue.venueID
                                        Completion:^(BOOL success, id responseObject, NSError *error) {
                                            if (success) {
@@ -251,7 +289,7 @@ NSString *const REUSE_ID = @"venueRID";
     NSFetchRequest *personalVenueFetch = [[NSFetchRequest alloc] initWithEntityName:@"PersonalVenue"];
     self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
                                                                                                error:nil];
-    NSLog(@"personal venue list: %@", self.dataManager.personalVenuesList);
+
     [self.dataManager.personalVenuesList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         PersonalVenue *personalVenue = (PersonalVenue *)obj;
         
@@ -260,7 +298,7 @@ NSString *const REUSE_ID = @"venueRID";
             NSLog(@"personal venue exists");
             
             if (personalVenue.liked == YES) {
-                NSLog(@"remove personal venue");
+                currentVenue.liked = NO;
                 [self.dataManager.managedObjectContext deleteObject:personalVenue];
                 cell.likeButton.backgroundColor = [UIColor clearColor];
             } else {
@@ -268,6 +306,8 @@ NSString *const REUSE_ID = @"venueRID";
                 cell.dislikeButton.backgroundColor = [UIColor clearColor];
                 personalVenue.liked = YES;
                 personalVenue.disliked = NO;
+                currentVenue.liked = YES;
+                currentVenue.disliked = NO;
             }
             *stop = YES;
         }
@@ -288,6 +328,8 @@ NSString *const REUSE_ID = @"venueRID";
     }
     
     [self.dataManager saveContext];
+    self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
+                                                                                               error:nil];
 }
 
 - (void)dislikeButtonWasTapped:(VenueTableViewCell *)cell
@@ -302,7 +344,7 @@ NSString *const REUSE_ID = @"venueRID";
     NSFetchRequest *personalVenueFetch = [[NSFetchRequest alloc] initWithEntityName:@"PersonalVenue"];
     self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
                                                                                                error:nil];
-    NSLog(@"personal venue list: %@", self.dataManager.personalVenuesList);
+    
     [self.dataManager.personalVenuesList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         PersonalVenue *personalVenue = (PersonalVenue *)obj;
         
@@ -311,6 +353,7 @@ NSString *const REUSE_ID = @"venueRID";
             NSLog(@"personal venue exists");
             
             if (personalVenue.disliked == YES) {
+                currentVenue.disliked = NO;
                 [self.dataManager.managedObjectContext deleteObject:personalVenue];
                 cell.dislikeButton.backgroundColor = [UIColor clearColor];
             } else {
@@ -318,6 +361,8 @@ NSString *const REUSE_ID = @"venueRID";
                 cell.dislikeButton.backgroundColor = [UIColor redColor];
                 personalVenue.disliked = YES;
                 personalVenue.liked = NO;
+                currentVenue.disliked = YES;
+                currentVenue.liked = NO;
             }
             *stop = YES;
         }
@@ -338,17 +383,8 @@ NSString *const REUSE_ID = @"venueRID";
     }
     
     [self.dataManager saveContext];
-    
-    
-    // ...do something to trigger venue dislike on or off
-//    if (self.isLiked) {
-//        self.dislikeButton.backgroundColor = [UIColor redColor];
-//        self.likeButton.backgroundColor = [UIColor clearColor];
-//        self.isLiked = NO;
-//    } else {
-//        self.dislikeButton.backgroundColor = [UIColor clearColor];
-//        self.isLiked = YES;
-//    }
+    self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
+                                                                                               error:nil];
 }
 
 /*

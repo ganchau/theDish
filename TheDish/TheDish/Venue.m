@@ -56,19 +56,4 @@
     return formattedAddress;
 }
 
-- (NSString *)fetchVenueNameWithID:(NSString *)venueID
-{
-    return [self.venueID isEqualToString:venueID] ? self.name : nil;
-}
-
-- (BOOL)fetchVenueLikedWithID:(NSString *)venueID
-{
-    return YES;
-}
-
-- (BOOL)fetchVenueDislikedWithID:(NSString *)venueID
-{
-    return YES;
-}
-
 @end

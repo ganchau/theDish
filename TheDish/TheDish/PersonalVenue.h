@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PersonalVenue : NSManagedObject
 
 // Insert code here to declare functionality of your managed object subclass
+- (void)fetchVenueLikedOrDislikedWithID:(NSString *)venueID Completion:(void (^)(BOOL liked, BOOL disliked, BOOL result))completionBlock;
 
 @end
 

@@ -2,7 +2,7 @@
 //  PersonalVenue+CoreDataProperties.m
 //  TheDish
 //
-//  Created by Gan Chau on 9/13/15.
+//  Created by Gan Chau on 9/15/15.
 //  Copyright © 2015 GC App. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -13,11 +13,11 @@
 
 @implementation PersonalVenue (CoreDataProperties)
 
-@dynamic disliked;
-@dynamic liked;
-@dynamic venueID;
-@dynamic name;
 @dynamic address;
+@dynamic disliked;
 @dynamic image;
+@dynamic liked;
+@dynamic name;
+@dynamic venueID;
 
 @end
