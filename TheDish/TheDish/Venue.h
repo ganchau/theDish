@@ -20,9 +20,4 @@
 
 - (instancetype)initWithVenue:(NSDictionary *)venue;
 
-// make a method that reads core data personal venue id for likes and dislikes to display in table view cell
-- (NSString *)fetchVenueNameWithID:(NSString *)venueID;
-- (BOOL)fetchVenueLikedWithID:(NSString *)venueID;
-- (BOOL)fetchVenueDislikedWithID:(NSString *)venueID;
-
 @end
