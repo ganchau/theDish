@@ -15,8 +15,10 @@
 #import <SVProgressHUD/SVProgressHUD.h>
 #import <CoreLocation/CoreLocation.h>
 #import "Constants.h"
+#import "PhotosCollectionViewController.h"
 
 NSString *const REUSE_ID = @"venueRID";
+NSString *const SEGUE_ID = @"venueSegue";
 
 @interface VenuesTableViewController () <CLLocationManagerDelegate, VenueTableViewCellDelegate>
 
@@ -54,6 +56,7 @@ NSString *const REUSE_ID = @"venueRID";
                                                                         green:61.0/255.0
                                                                          blue:127.0/255.0
                                                                         alpha:1];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{ NSForegroundColorAttributeName : [UIColor whiteColor]};
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     self.navigationController.navigationBar.translucent = NO;
@@ -115,7 +118,7 @@ NSString *const REUSE_ID = @"venueRID";
     }];
 }
 
-#pragma <#arguments#>
+#pragma mark - fetch personal venue from core data
 
 - (void)fetchPersonalVenueFromPersistentStore
 {
@@ -196,22 +199,8 @@ NSString *const REUSE_ID = @"venueRID";
     cell.venueAddress.text = venue.address;
     cell.venuePhoto.alpha = 0;
     
-    for (PersonalVenue *personalVenue in self.dataManager.personalVenuesList) {
-        [personalVenue fetchVenueLikedOrDislikedWithID:venue.venueID Completion:^(BOOL liked, BOOL disliked, BOOL result) {
-            if (liked) {
-                venue.liked = result;
-                venue.disliked = NO;
-                return;
-            } else if (disliked) {
-                venue.disliked = result;
-                venue.liked = NO;
-                return;
-            }
-        }];
-    }
-    
-    NSLog(@"%@ liked :%d", venue.name, venue.liked);
-    NSLog(@"%@ disliked :%d", venue.name, venue.disliked);
+    // update current venue to reflect liked or disliked from personal venue list
+    [self updateCurrentVenueLikedOrDislikedWithVenue:venue];
     
     // update cell's like and dislike button to reflect current venue's data
     if (venue.liked) {
@@ -275,6 +264,26 @@ NSString *const REUSE_ID = @"venueRID";
     return cell;
 }
 
+#pragma mark - update current venue with personal venue's like or dislike
+
+- (void)updateCurrentVenueLikedOrDislikedWithVenue:(Venue *)venue
+{
+    [self.dataManager.personalVenuesList enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        PersonalVenue *personalVenue = (PersonalVenue *)obj;
+        [personalVenue fetchVenueLikedOrDislikedWithID:venue.venueID Completion:^(BOOL liked, BOOL disliked, BOOL result) {
+            if (liked) {
+                venue.liked = result;
+                venue.disliked = NO;
+                *stop = YES;
+            } else if (disliked) {
+                venue.disliked = result;
+                venue.liked = NO;
+                *stop = YES;
+            }
+        }];
+    }];
+}
+
 #pragma mark - VenueTableViewCell delegate methods
 
 - (void)likeButtonWasTapped:(VenueTableViewCell *)cell
@@ -282,14 +291,12 @@ NSString *const REUSE_ID = @"venueRID";
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     __block BOOL venueExists = NO;
     
-    // currently selected venue
     Venue *currentVenue = self.dataManager.venuesList[indexPath.row];
 
     // fetch arrays of personal venue from persistent data
-    NSFetchRequest *personalVenueFetch = [[NSFetchRequest alloc] initWithEntityName:@"PersonalVenue"];
-    self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
-                                                                                               error:nil];
+    [self fetchPersonalVenueFromPersistentStore];
 
+    // enumerate through personal venue list
     [self.dataManager.personalVenuesList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         PersonalVenue *personalVenue = (PersonalVenue *)obj;
         
@@ -327,9 +334,9 @@ NSString *const REUSE_ID = @"venueRID";
         NSLog(@"inserted into managed context: %@", personalVenue);
     }
     
+    // save personal venue and fetch back new data
     [self.dataManager saveContext];
-    self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
-                                                                                               error:nil];
+    [self fetchPersonalVenueFromPersistentStore];
 }
 
 - (void)dislikeButtonWasTapped:(VenueTableViewCell *)cell
@@ -337,14 +344,12 @@ NSString *const REUSE_ID = @"venueRID";
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     __block BOOL venueExists = NO;
     
-    // currently selected venue
     Venue *currentVenue = self.dataManager.venuesList[indexPath.row];
     
     // fetch arrays of personal venue from persistent data
-    NSFetchRequest *personalVenueFetch = [[NSFetchRequest alloc] initWithEntityName:@"PersonalVenue"];
-    self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
-                                                                                               error:nil];
+    [self fetchPersonalVenueFromPersistentStore];
     
+    // enumerate through personal venue list
     [self.dataManager.personalVenuesList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         PersonalVenue *personalVenue = (PersonalVenue *)obj;
         
@@ -383,8 +388,7 @@ NSString *const REUSE_ID = @"venueRID";
     }
     
     [self.dataManager saveContext];
-    self.dataManager.personalVenuesList = [self.dataManager.managedObjectContext executeFetchRequest:personalVenueFetch
-                                                                                               error:nil];
+    [self fetchPersonalVenueFromPersistentStore];
 }
 
 /*
@@ -421,14 +425,20 @@ NSString *const REUSE_ID = @"venueRID";
  }
  */
 
-/*
+
  #pragma mark - Navigation
  
  // In a storyboard-based application, you will often want to do a little preparation before navigation
  - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
  // Get the new view controller using [segue destinationViewController].
  // Pass the selected object to the new view controller.
- }
- */
+     if ([segue.identifier isEqualToString:SEGUE_ID]) {
+         VenueTableViewCell *selectedCell = (VenueTableViewCell *)sender;
+         PhotosCollectionViewController *photosCVC = segue.destinationViewController;
+         photosCVC.venueID = selectedCell.venueID;
+     }
+
+}
+
 
 @end

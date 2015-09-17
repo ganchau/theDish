@@ -11,9 +11,12 @@
 #import "DataManager.h"
 #import "FourSquareAPI.h"
 #import "PersonalVenue+CoreDataProperties.h"
+#import "VenueTableViewCell.h"
+#import "PhotosCollectionViewController.h"
 #import "Constants.h"
 
 NSString *const MY_REUSE_ID = @"myVenueRID";
+NSString *const MY_SEGUE_ID = @"personalVenueSegue";
 
 @interface LikedVenuesTableViewController ()
 
@@ -54,6 +57,7 @@ NSString *const MY_REUSE_ID = @"myVenueRID";
                                                                            green:61.0/255.0
                                                                             blue:127.0/255.0
                                                                            alpha:1];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{ NSForegroundColorAttributeName : [UIColor whiteColor]};
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     self.navigationController.navigationBar.translucent = NO;
@@ -218,14 +222,18 @@ NSString *const MY_REUSE_ID = @"myVenueRID";
 }
 */
 
-/*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:MY_SEGUE_ID]) {
+        VenueTableViewCell *selectedCell = (VenueTableViewCell *)sender;
+        PhotosCollectionViewController *photosCVC = segue.destinationViewController;
+        photosCVC.venueID = selectedCell.venueID;
+    }
+    
 }
-*/
 
 @end

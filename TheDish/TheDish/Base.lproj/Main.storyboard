@@ -109,6 +109,7 @@
                                     <outlet property="venueAddress" destination="3B6-c0-PZW" id="fvF-bK-8HZ"/>
                                     <outlet property="venueName" destination="Bk9-Zk-Ofq" id="mUe-wD-hgo"/>
                                     <outlet property="venuePhoto" destination="3Hq-jc-Amr" id="BnX-fe-2wR"/>
+                                    <segue destination="kX5-EG-Iu1" kind="show" identifier="venueSegue" id="8G4-Xh-Vyi"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -122,6 +123,59 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CpY-Zr-pWr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="961" y="28"/>
+        </scene>
+        <!--Photos Collection View Controller-->
+        <scene sceneID="APf-rm-mh6">
+            <objects>
+                <collectionViewController id="kX5-EG-Iu1" customClass="PhotosCollectionViewController" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="BuR-PZ-Ja0">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="0.0" id="6v9-at-MXi">
+                            <size key="itemSize" width="100" height="100"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VenuePhotoRID" id="NY0-qD-Mer" customClass="ImageCollectionViewCell">
+                                <rect key="frame" x="0.0" y="64" width="100" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eQs-Za-bGP">
+                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                            <animations/>
+                                        </imageView>
+                                    </subviews>
+                                    <animations/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstItem="eQs-Za-bGP" firstAttribute="leading" secondItem="NY0-qD-Mer" secondAttribute="leadingMargin" constant="-8" id="Ig4-st-3cf"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="eQs-Za-bGP" secondAttribute="bottom" constant="-8" id="SLN-Tn-3T3"/>
+                                    <constraint firstItem="eQs-Za-bGP" firstAttribute="top" secondItem="NY0-qD-Mer" secondAttribute="topMargin" constant="-8" id="dQ9-FD-cKI"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="eQs-Za-bGP" secondAttribute="trailing" constant="-8" id="h6B-Cx-jfC"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="venueImageView" destination="eQs-Za-bGP" id="Fbn-5v-3UJ"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="kX5-EG-Iu1" id="AyJ-qk-RZ2"/>
+                            <outlet property="delegate" destination="kX5-EG-Iu1" id="kej-ai-bAG"/>
+                        </connections>
+                    </collectionView>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3kU-NR-UyK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1774" y="28"/>
         </scene>
         <!--Liked Venues Table View Controller-->
         <scene sceneID="Y7z-KZ-kTX">
@@ -184,6 +238,7 @@
                                     <outlet property="venueAddress" destination="tYj-yg-0fz" id="5ir-bk-nZm"/>
                                     <outlet property="venueName" destination="ihk-g5-iOm" id="OxO-av-xWz"/>
                                     <outlet property="venuePhoto" destination="W1H-7m-xBr" id="9aK-ZA-Vh8"/>
+                                    <segue destination="kX5-EG-Iu1" kind="show" identifier="personalVenueSegue" id="UFd-Ab-X02"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -277,4 +332,7 @@
             <point key="canvasLocation" x="149" y="754"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="UFd-Ab-X02"/>
+    </inferredMetricsTieBreakers>
 </document>
