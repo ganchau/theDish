@@ -18,6 +18,8 @@
 		BD3254911B8F5DF900C657F4 /* VenuesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD3254901B8F5DF900C657F4 /* VenuesTableViewController.m */; };
 		BD584E461BA6230700A9912A /* PersonalVenue+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = BD584E431BA6230700A9912A /* PersonalVenue+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
 		BD584E471BA6230700A9912A /* PersonalVenue.m in Sources */ = {isa = PBXBuildFile; fileRef = BD584E451BA6230700A9912A /* PersonalVenue.m */; settings = {ASSET_TAGS = (); }; };
+		BD584EAE1BA9DCBE00A9912A /* PhotosCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD584EAD1BA9DCBE00A9912A /* PhotosCollectionViewController.m */; settings = {ASSET_TAGS = (); }; };
+		BD584EB11BA9F18400A9912A /* ImageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD584EB01BA9F18400A9912A /* ImageCollectionViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		BD6CC2FF1B9932BE0088F18F /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BD6CC2FE1B9932BE0088F18F /* DataManager.m */; };
 		BD88E38B1B9A3777000692DD /* PersonalVenueList.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BD88E3891B9A3777000692DD /* PersonalVenueList.xcdatamodeld */; };
 		BD88E3911B9CF18F000692DD /* PersonalVenueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD88E3901B9CF18F000692DD /* PersonalVenueTableViewCell.m */; };
@@ -60,6 +62,10 @@
 		BD584E431BA6230700A9912A /* PersonalVenue+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PersonalVenue+CoreDataProperties.m"; sourceTree = "<group>"; };
 		BD584E441BA6230700A9912A /* PersonalVenue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalVenue.h; sourceTree = "<group>"; };
 		BD584E451BA6230700A9912A /* PersonalVenue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalVenue.m; sourceTree = "<group>"; };
+		BD584EAC1BA9DCBE00A9912A /* PhotosCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotosCollectionViewController.h; sourceTree = "<group>"; };
+		BD584EAD1BA9DCBE00A9912A /* PhotosCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotosCollectionViewController.m; sourceTree = "<group>"; };
+		BD584EAF1BA9F18400A9912A /* ImageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCollectionViewCell.h; sourceTree = "<group>"; };
+		BD584EB01BA9F18400A9912A /* ImageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCollectionViewCell.m; sourceTree = "<group>"; };
 		BD6CC2FD1B9932BE0088F18F /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
 		BD6CC2FE1B9932BE0088F18F /* DataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
 		BD88E38A1B9A3777000692DD /* PersonalVenueList.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PersonalVenueList.xcdatamodel; sourceTree = "<group>"; };
@@ -189,6 +195,8 @@
 				BD3254901B8F5DF900C657F4 /* VenuesTableViewController.m */,
 				BDA421841B98BCD100844025 /* LikedVenuesTableViewController.h */,
 				BDA421851B98BCD100844025 /* LikedVenuesTableViewController.m */,
+				BD584EAC1BA9DCBE00A9912A /* PhotosCollectionViewController.h */,
+				BD584EAD1BA9DCBE00A9912A /* PhotosCollectionViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -200,6 +208,8 @@
 				BDA421821B954BDD00844025 /* VenueTableViewCell.m */,
 				BD88E38F1B9CF18F000692DD /* PersonalVenueTableViewCell.h */,
 				BD88E3901B9CF18F000692DD /* PersonalVenueTableViewCell.m */,
+				BD584EAF1BA9F18400A9912A /* ImageCollectionViewCell.h */,
+				BD584EB01BA9F18400A9912A /* ImageCollectionViewCell.m */,
 				BD32546D1B8F41DB00C657F4 /* Main.storyboard */,
 				BD3254701B8F41DB00C657F4 /* Images.xcassets */,
 				BD3254721B8F41DB00C657F4 /* LaunchScreen.xib */,
@@ -357,9 +367,11 @@
 				BDA421861B98BCD100844025 /* LikedVenuesTableViewController.m in Sources */,
 				BD3254661B8F41DB00C657F4 /* main.m in Sources */,
 				BDA4217A1B8FFCEE00844025 /* Venue.m in Sources */,
+				BD584EB11BA9F18400A9912A /* ImageCollectionViewCell.m in Sources */,
 				BD32548B1B8F425500C657F4 /* Constants.m in Sources */,
 				BD584E461BA6230700A9912A /* PersonalVenue+CoreDataProperties.m in Sources */,
 				BDA421831B954BDD00844025 /* VenueTableViewCell.m in Sources */,
+				BD584EAE1BA9DCBE00A9912A /* PhotosCollectionViewController.m in Sources */,
 				BD6CC2FF1B9932BE0088F18F /* DataManager.m in Sources */,
 				BDA421771B8FEDEC00844025 /* FourSquareAPI.m in Sources */,
 				BD88E38B1B9A3777000692DD /* PersonalVenueList.xcdatamodeld in Sources */,
