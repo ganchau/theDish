@@ -155,12 +155,20 @@ NSString *const SEGUE_ID = @"venueSegue";
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
     NSLog(@"CLLocationManager didFailWithError: %@", error);
-    UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                         message:@"Failed to Get Your Location"
-                                                        delegate:nil
-                                               cancelButtonTitle:@"OK"
-                                               otherButtonTitles:nil];
-    [errorAlert show];
+    
+    UIAlertController *errorAlert = [UIAlertController alertControllerWithTitle:@"Error"
+                                                                        message:@"Failed to get your location"
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+                                                         [errorAlert dismissViewControllerAnimated:YES completion:nil];
+                                                     }];
+    
+    [errorAlert addAction:okAction];
+    
+    [self presentViewController:errorAlert animated:YES completion:nil];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
