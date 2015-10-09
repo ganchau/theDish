@@ -14,7 +14,9 @@ extern NSString *const FOURSQUARE_CLIENT_SECRET;
 extern NSString *const SEARCH_FOOD_CATEGORY;
 extern NSString *const SEARCH_RADIUS;
 extern NSString *const SEARCH_LIMIT;
-extern NSString *const IMAGE_SIZE;
+extern NSString *const IMAGE_SIZE_BIG;
+extern NSString *const IMAGE_SIZE_MEDIUM;
+extern NSString *const IMAGE_SIZE_SMALL;
 
 @interface Constants : NSObject
 

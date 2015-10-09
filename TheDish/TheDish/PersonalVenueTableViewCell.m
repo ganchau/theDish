@@ -12,6 +12,7 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    self.venuePhoto.layer.cornerRadius = 32;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
