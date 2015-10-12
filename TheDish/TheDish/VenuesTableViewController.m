@@ -240,7 +240,7 @@ NSString *const SEGUE_ID = @"venueSegue";
                                                NSString *prefixURL = [responseObject[@"items"] firstObject][@"prefix"];
                                                NSString *suffixURL = [responseObject[@"items"] firstObject][@"suffix"];
                                                
-                                               NSString *imageURL = [NSString stringWithFormat:@"%@%@%@", prefixURL, IMAGE_SIZE, suffixURL];
+                                               NSString *imageURL = [NSString stringWithFormat:@"%@%@%@", prefixURL, IMAGE_SIZE_BIG, suffixURL];
                                                __weak VenueTableViewCell *weakCell = cell;
                                                
                                                [FourSquareAPI setImageWithURL:imageURL

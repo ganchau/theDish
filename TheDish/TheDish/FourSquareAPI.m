@@ -21,6 +21,7 @@
                               @"limit" : SEARCH_LIMIT,
                               @"categoryId" : SEARCH_FOOD_CATEGORY,
                               @"radius" : SEARCH_RADIUS,
+                              @"intent" : @"checkin",
                               @"v" : [self formatDate] };
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];

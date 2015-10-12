@@ -39,7 +39,7 @@ NSString *const COLLECTION_RID = @"VenuePhotoRID";
                                            for (NSDictionary *object in responseObject[@"items"]) {
                                                NSString *prefix = object[@"prefix"];
                                                NSString *suffix = object[@"suffix"];
-                                               NSString *imageURL = [NSString stringWithFormat:@"%@%@%@", prefix, IMAGE_SIZE, suffix];
+                                               NSString *imageURL = [NSString stringWithFormat:@"%@%@%@", prefix, IMAGE_SIZE_MEDIUM, suffix];
                                                
                                                NSLog(@"%@", imageURL);
                                                [self.venuePhotos addObject:imageURL];
