@@ -24,14 +24,14 @@
                               @"intent" : @"checkin",
                               @"v" : [self formatDate] };
     
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     NSString *URLString = [FOURSQUARE_BASE_URL stringByAppendingString:@"venues/search"];
     
     [manager GET:URLString
       parameters:params
-         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+         success:^(NSURLSessionTask *task, id responseObject) {
              completionBlock(YES, responseObject[@"response"][@"venues"], nil);
-         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         } failure:^(NSURLSessionTask *task, NSError *error) {
              completionBlock(NO, nil, error);
          }];
 }
@@ -42,32 +42,32 @@
                               @"client_secret" : FOURSQUARE_CLIENT_SECRET,
                               @"v" : [self formatDate] };
     
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     NSString *URLString = [FOURSQUARE_BASE_URL stringByAppendingString:[NSString stringWithFormat:@"venues/%@/photos", venueID]];
     
     [manager GET:URLString
       parameters:params
-         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+         success:^(NSURLSessionTask *task, id responseObject) {
              completionBlock(YES, responseObject[@"response"][@"photos"], nil);
-         } failure:^(AFHTTPRequestOperation * operation, NSError *error) {
+         } failure:^(NSURLSessionTask *task, NSError *error) {
              completionBlock(NO, nil, error);
          }];
 }
 
-+ (void)getImageWithURL:(NSString *)URLString Completion:(void (^)(BOOL, UIImage *, NSError *))completionBlock
-{
-    NSURLRequest *URLRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:URLString]];
-    AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:URLRequest];
-    requestOperation.responseSerializer = [AFImageResponseSerializer serializer];
-    
-    [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        completionBlock(YES, responseObject, nil);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        completionBlock(NO, nil, error);
-    }];
-    
-    [requestOperation start];
-}
+//+ (void)getImageWithURL:(NSString *)URLString Completion:(void (^)(BOOL, UIImage *, NSError *))completionBlock
+//{
+//    NSURLRequest *URLRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:URLString]];
+//    AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:URLRequest];
+//    requestOperation.responseSerializer = [AFImageResponseSerializer serializer];
+//    
+//    [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        completionBlock(YES, responseObject, nil);
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        completionBlock(NO, nil, error);
+//    }];
+//    
+//    [requestOperation start];
+//}
 
 + (void)setImageWithURL:(NSString *)URLString ImageView:(UIImageView *)imageView Completion:(void (^)(BOOL, UIImage *))completionBlock
 {
